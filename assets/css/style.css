@@ -1,0 +1,416 @@
+/* ===== reset/minimal ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  color: #333;
+}
+
+/* ===== header e logotipo ===== */
+header {
+  background: #63acff;
+  color: #fff;
+}
+header .brand {
+  text-align: center;
+  padding: 1rem 0 0.5rem;
+}
+header .brand h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+/* ===== nav principal ===== */
+nav.main-menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 2rem;
+}
+.menu-left,
+.menu-right {
+  display: flex;
+  align-items: center;
+}
+.menu-left a,
+.menu-right a,
+.menu-left .pipe,
+.menu-right .pipe {
+  margin: 0 0.5rem;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+}
+.menu-left a:hover,
+.menu-right a:hover {
+  text-decoration: underline;
+}
+
+/* ===== títulos de seção ===== */
+.product-page h1,
+section h2 {
+  margin: 1.5rem 2rem 1rem;
+  font-size: 1.75rem;
+}
+
+/* ===== seção Novidades ===== */
+.novidades {
+  text-align: center;
+  padding: 2rem 0;
+}
+/* override: 3 colunas fixas de 200px, centralizadas */
+.novidades .cards {
+  display: grid;
+  grid-template-columns: repeat(3, 200px);
+  gap: 2rem;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+/* ===== grid de cards (produtos) ===== */
+.cards {
+  display: grid;
+  /* no resto do site, colunas fluem com no mínimo 200px */
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 2rem;
+  padding: 0 2rem 2rem;
+  justify-content: center;
+}
+
+/* ===== estilo dos cards ===== */
+.card {
+  background: #ebf4ff;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  overflow: hidden;
+  text-align: center;
+  padding-bottom: 1rem;
+}
+.card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+.card h3 {
+  margin: 1rem 0 0.5rem;
+  font-size: 1.1rem;
+  color: #333;
+}
+.card p {
+  display: inline-block;
+  background: #63acff;
+  color: #fff;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+}
+
+/* botão dentro do card */
+.card .button {
+  margin-top: 0.75rem;
+  padding: 0.5rem 1rem;
+  background: #fff;
+  color: #63acff;
+  border: 2px solid #fff;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+.card .button:hover {
+  background: #eee;
+}
+
+/* ===== fieldset e legend ===== */
+fieldset {
+  margin: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+legend {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* ===== botões gerais ===== */
+button {
+  padding: 8px 16px;
+  background: #63acff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+button:hover {
+  background: #5a9be0;
+}
+
+/* ===== tabela do carrinho ===== */
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+.cart-table th,
+.cart-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+.cart-table th {
+  background: #f1f1f1;
+}
+.cart-table input[type="number"] {
+  width: 60px;
+}
+
+/* ===== página de detalhes ===== */
+.details-page {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.details-image {
+  flex: 1 1 300px;
+}
+.details-image img {
+  width: 100%;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.details-info {
+  flex: 1 1 300px;
+}
+.details-info h1 {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+.details-price {
+  display: inline-block;
+  background: #63acff;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+.details-desc {
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+.details-form fieldset {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+.details-form legend {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+.details-form label {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 1rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+}
+.details-form input[type="radio"] {
+  margin-right: 0.35rem;
+}
+.details-form .t-extra input[type="text"] {
+  margin-left: 0.5rem;
+  padding: 0.25rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.details-form button {
+  background: #63acff;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: none;
+}
+.details-form button:hover {
+  background: #5a9be0;
+}
+
+/* ===== página de criar produto ===== */
+.form-page {
+  max-width: 600px;
+  margin: 2rem auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.form-page h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
+  color: #333;
+}
+
+.form-page label {
+  display: block;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-page input[type="text"],
+.form-page input[type="number"],
+.form-page input[type="file"],
+.form-page textarea,
+.form-page select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 0.25rem;
+}
+
+.form-page input[type="file"] {
+  padding: 0.25rem;
+}
+
+.form-page fieldset {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-page legend {
+  font-weight: bold;
+  margin-bottom: 0.75rem;
+  color: #555;
+}
+
+.form-page .t-extra input[type="text"] {
+  width: auto;
+  display: inline-block;
+  margin-left: 0.5rem;
+}
+
+.form-page button {
+  display: block;
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 0.75rem;
+  background: #63acff;
+  color: #fff;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.form-page button:hover {
+  background: #5a9be0;
+}
+
+
+/* ===== página de carrinho ===== */
+/* Se ainda não tiver, envolva seu <h2> e <form> num <main class="cart-page"> … </main> */
+
+.cart-page {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.cart-page h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
+  color: #333;
+}
+
+.cart-page p {
+  text-align: center;
+  font-size: 1rem;
+  margin-top: 1rem;
+}
+
+/* Tabela do carrinho */
+.cart-page .cart-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+
+.cart-page .cart-table th,
+.cart-page .cart-table td {
+  border: 1px solid #ddd;
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.cart-page .cart-table th {
+  background: #f1f1f1;
+  font-weight: 500;
+}
+
+.cart-page .cart-table input[type="number"] {
+  width: 60px;
+  padding: 0.25rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* botão “Remover” dentro da tabela */
+.cart-page .cart-table button {
+  padding: 4px 8px;
+  background: #63acff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cart-page .cart-table button:hover {
+  background: #5a9be0;
+}
+
+/* botão “Atualizar Quantidades” */
+.cart-page form > button[type="submit"] {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  background: #63acff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.cart-page form > button[type="submit"]:hover {
+  background: #5a9be0;
+}
+
+/* botão “Finalizar Compra” */
+.cart-page .button {
+  display: inline-block;
+  background: #63acff;
+  color: #fff;
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+}
+
+.cart-page .button:hover {
+  background: #5a9be0;
+}
