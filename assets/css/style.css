@@ -1,41 +1,51 @@
-/* ===== reset/minimal ===== */
+/* ==========================================================================
+   1. ESTILOS GERAIS E RESET
+   ========================================================================== */
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
+
 body {
   font-family: Arial, sans-serif;
   background: #f9f9f9;
   color: #333;
 }
 
-/* ===== header e logotipo ===== */
+/* ==========================================================================
+   2. CABEÇALHO E NAVEGAÇÃO
+   ========================================================================== */
+
 header {
   background: #63acff;
   color: #fff;
 }
+
 header .brand {
   text-align: center;
   padding: 1rem 0 0.5rem;
 }
+
 header .brand h1 {
   margin: 0;
   font-size: 2rem;
 }
 
-/* ===== nav principal ===== */
 nav.main-menu {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 2rem;
 }
+
 .menu-left,
 .menu-right {
   display: flex;
   align-items: center;
 }
+
 .menu-left a,
 .menu-right a,
 .menu-left .pipe,
@@ -45,43 +55,25 @@ nav.main-menu {
   text-decoration: none;
   font-weight: 500;
 }
+
 .menu-left a:hover,
 .menu-right a:hover {
   text-decoration: underline;
 }
 
-/* ===== títulos de seção ===== */
-.product-page h1,
-section h2 {
-  margin: 1.5rem 2rem 1rem;
-  font-size: 1.75rem;
-}
+/* ==========================================================================
+   3. COMPONENTES REUTILIZÁVEIS (Cards, Botões, Formulários)
+   ========================================================================== */
 
-/* ===== seção Novidades ===== */
-.novidades {
-  text-align: center;
-  padding: 2rem 0;
-}
-/* override: 3 colunas fixas de 200px, centralizadas */
-.novidades .cards {
-  display: grid;
-  grid-template-columns: repeat(3, 200px);
-  gap: 2rem;
-  justify-content: center;
-  margin: 0 auto;
-}
-
-/* ===== grid de cards (produtos) ===== */
+/* --- Grid de Cards --- */
 .cards {
   display: grid;
-  /* no resto do site, colunas fluem com no mínimo 200px */
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 2rem;
   padding: 0 2rem 2rem;
   justify-content: center;
 }
 
-/* ===== estilo dos cards ===== */
 .card {
   background: #ebf4ff;
   border-radius: 0.75rem;
@@ -90,16 +82,19 @@ section h2 {
   text-align: center;
   padding-bottom: 1rem;
 }
+
 .card img {
   width: 100%;
   height: 200px;
   object-fit: cover;
 }
+
 .card h3 {
   margin: 1rem 0 0.5rem;
   font-size: 1.1rem;
   color: #333;
 }
+
 .card p {
   display: inline-block;
   background: #63acff;
@@ -109,33 +104,7 @@ section h2 {
   font-weight: bold;
 }
 
-/* botão dentro do card */
-.card .button {
-  margin-top: 0.75rem;
-  padding: 0.5rem 1rem;
-  background: #fff;
-  color: #63acff;
-  border: 2px solid #fff;
-  border-radius: 0.5rem;
-  cursor: pointer;
-}
-.card .button:hover {
-  background: #eee;
-}
-
-/* ===== fieldset e legend ===== */
-fieldset {
-  margin: 20px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-legend {
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-/* ===== botões gerais ===== */
+/* --- Botões Gerais --- */
 button {
   padding: 8px 16px;
   background: #63acff;
@@ -143,31 +112,49 @@ button {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
+
 button:hover {
   background: #5a9be0;
 }
 
-/* ===== tabela do carrinho ===== */
-.cart-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 20px 0;
-}
-.cart-table th,
-.cart-table td {
+/* --- Estilos Gerais de Formulário --- */
+fieldset {
+  margin: 20px 0; /* Ajustado para margem vertical */
+  padding: 10px;
   border: 1px solid #ddd;
-  padding: 8px;
-  text-align: center;
-}
-.cart-table th {
-  background: #f1f1f1;
-}
-.cart-table input[type="number"] {
-  width: 60px;
+  border-radius: 4px;
 }
 
-/* ===== página de detalhes ===== */
+legend {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* ==========================================================================
+   4. ESTILOS ESPECÍFICOS DAS PÁGINAS
+   ========================================================================== */
+
+/* --- Títulos de Seção --- */
+.product-page h1,
+section h2 {
+  margin: 1.5rem 2rem 1rem;
+  font-size: 1.75rem;
+}
+
+/* --- Página Inicial (Novidades) --- */
+.novidades {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.novidades .cards {
+  grid-template-columns: repeat(3, 200px); /* Grid específico para novidades */
+  margin: 0 auto;
+}
+
+/* --- Página de Detalhes do Produto --- */
 .details-page {
   display: flex;
   flex-wrap: wrap;
@@ -176,21 +163,26 @@ button:hover {
   max-width: 1000px;
   margin: 0 auto;
 }
+
 .details-image {
   flex: 1 1 300px;
 }
+
 .details-image img {
   width: 100%;
   border-radius: 0.75rem;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
+
 .details-info {
   flex: 1 1 300px;
 }
+
 .details-info h1 {
   font-size: 1.75rem;
   margin-bottom: 0.5rem;
 }
+
 .details-price {
   display: inline-block;
   background: #63acff;
@@ -201,20 +193,12 @@ button:hover {
   font-weight: bold;
   font-size: 1.25rem;
 }
+
 .details-desc {
   line-height: 1.5;
   margin-bottom: 1.5rem;
 }
-.details-form fieldset {
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-}
-.details-form legend {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
+
 .details-form label {
   display: inline-flex;
   align-items: center;
@@ -222,108 +206,75 @@ button:hover {
   margin-bottom: 0.5rem;
   cursor: pointer;
 }
+
 .details-form input[type="radio"] {
   margin-right: 0.35rem;
 }
+
 .details-form .t-extra input[type="text"] {
   margin-left: 0.5rem;
   padding: 0.25rem;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
 .details-form button {
-  background: #63acff;
-  color: #fff;
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
-  border-radius: 4px;
-  border: none;
-}
-.details-form button:hover {
-  background: #5a9be0;
 }
 
-/* ===== página de criar produto ===== */
+/* --- Páginas de Formulário (Login, Cadastro, Novo Produto) --- */
 .form-page {
-  max-width: 600px;
+  max-width: 450px;
   margin: 2rem auto;
   background: #fff;
-  padding: 2rem;
+  padding: 2rem 2.5rem;
   border-radius: 0.75rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .form-page h2 {
   text-align: center;
-  margin-bottom: 1.5rem;
-  font-size: 1.75rem;
-  color: #333;
+  margin-bottom: 2rem;
 }
 
 .form-page label {
   display: block;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   font-weight: 500;
-  color: #333;
+  color: #555;
 }
 
 .form-page input[type="text"],
 .form-page input[type="number"],
+.form-page input[type="password"],
+.form-page input[type="email"],
 .form-page input[type="file"],
 .form-page textarea,
 .form-page select {
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.75rem;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 1rem;
-  margin-top: 0.25rem;
-}
-
-.form-page input[type="file"] {
-  padding: 0.25rem;
-}
-
-.form-page fieldset {
-  margin: 1.5rem 0;
-  padding: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.form-page legend {
-  font-weight: bold;
-  margin-bottom: 0.75rem;
-  color: #555;
-}
-
-.form-page .t-extra input[type="text"] {
-  width: auto;
-  display: inline-block;
-  margin-left: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .form-page button {
-  display: block;
   width: 100%;
   margin-top: 1.5rem;
-  padding: 0.75rem;
-  background: #63acff;
-  color: #fff;
-  font-size: 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  padding: 0.85rem;
+  font-size: 1.1rem;
+  font-weight: bold;
 }
 
-.form-page button:hover {
-  background: #5a9be0;
+.form-page .link-alternativo {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
 }
 
-
-/* ===== página de carrinho ===== */
-/* Se ainda não tiver, envolva seu <h2> e <form> num <main class="cart-page"> … </main> */
-
+/* --- Página do Carrinho --- */
 .cart-page {
   max-width: 800px;
   margin: 2rem auto;
@@ -333,17 +284,8 @@ button:hover {
 .cart-page h2 {
   text-align: center;
   margin-bottom: 1.5rem;
-  font-size: 1.75rem;
-  color: #333;
 }
 
-.cart-page p {
-  text-align: center;
-  font-size: 1rem;
-  margin-top: 1rem;
-}
-
-/* Tabela do carrinho */
 .cart-page .cart-table {
   width: 100%;
   border-collapse: collapse;
@@ -355,11 +297,19 @@ button:hover {
   border: 1px solid #ddd;
   padding: 0.75rem;
   text-align: center;
+  vertical-align: middle;
 }
 
 .cart-page .cart-table th {
   background: #f1f1f1;
   font-weight: 500;
+}
+
+.cart-page .cart-table img {
+  width: 100px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
 .cart-page .cart-table input[type="number"] {
@@ -369,48 +319,56 @@ button:hover {
   border-radius: 4px;
 }
 
-/* botão “Remover” dentro da tabela */
-.cart-page .cart-table button {
-  padding: 4px 8px;
-  background: #63acff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.cart-page .cart-table button.remove-btn {
+  background-color: #ff6363;
+  color: white;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-weight: bold;
+  padding: 0; /* Reset do padding do botão geral */
 }
 
-.cart-page .cart-table button:hover {
-  background: #5a9be0;
+.cart-page .cart-table button.remove-btn:hover {
+  background-color: #e04a4a;
 }
 
-/* botão “Atualizar Quantidades” */
-.cart-page form > button[type="submit"] {
-  display: block;
-  width: 100%;
-  padding: 0.75rem;
-  background: #63acff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
+.cart-page .cart-actions {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #ddd;
+  text-align: right;
+}
+
+.cart-page .cart-total {
+  font-size: 1.5rem;
+  font-weight: bold;
   margin-bottom: 1rem;
 }
 
-.cart-page form > button[type="submit"]:hover {
-  background: #5a9be0;
-}
-
-/* botão “Finalizar Compra” */
-.cart-page .button {
+.cart-page .btn-finalizar {
   display: inline-block;
-  background: #63acff;
+  background: #28a745;
   color: #fff;
   text-decoration: none;
-  padding: 0.75rem 1.5rem;
+  padding: 0.85rem 1.75rem;
   border-radius: 4px;
+  font-weight: bold;
+  transition: background-color 0.2s;
 }
 
-.cart-page .button:hover {
-  background: #5a9be0;
+.cart-page .btn-finalizar:hover {
+  background: #218838;
 }
+
+/* --- Controle de Largura das Colunas do Carrinho --- */
+.cart-page .cart-table th:nth-child(1),
+.cart-page .cart-table td:nth-child(1) { width: 120px; } /* Foto */
+
+.cart-page .cart-table th:nth-child(2) { width: 30%; } /* Produto */
+
+.cart-page .cart-table th:nth-child(6),
+.cart-page .cart-table td:nth-child(6) { width: 90px; } /* Quantidade */
+
+.cart-page .cart-table th:nth-child(8),
+.cart-page .cart-table td:nth-child(8) { width: 60px; } /* Remover */

@@ -26,10 +26,9 @@
       <button type="submit">Entrar</button>
     </form>
 
-    <p style="text-align:center; margin-top:1rem;">
-      Não tem conta?
-      <a href="/fanbeads/register">Cadastre-se</a>
-    </p>
+    <div class="link-alternativo">
+  Não tem conta? <a href="/fanbeads/register">Cadastre-se</a>
+</div>
   </main>
 </body>
 </html>

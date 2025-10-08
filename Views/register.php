@@ -30,10 +30,9 @@
       <button type="submit">Criar Conta</button>
     </form>
 
-    <p style="text-align:center; margin-top:1rem;">
-      Já tem conta?
-      <a href="/fanbeads/login">Faça login</a>
-    </p>
+    <div class="link-alternativo">
+  Já tem conta? <a href="/fanbeads/login">Faça login</a>
+</div>
   </main>
 </body>
 </html>

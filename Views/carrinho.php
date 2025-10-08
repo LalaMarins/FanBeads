@@ -68,10 +68,13 @@
         </tbody>
       </table>
 
+       <div class="cart-actions">
       <div class="cart-total">
         <strong>Total:</strong>
         <span id="cart-total">R$ <?= number_format($total,2,',','.') ?></span>
       </div>
+       <a href="/fanbeads/pedido/feito" class="btn-finalizar">Finalizar Pedido</a>
+    </div>
     <?php endif; ?>
   </main>
 
@@ -127,7 +130,5 @@
     });
   });
   </script>
-  <a href="/fanbeads/pedido/feito" class="btn-finalizar">Finalizar Pedido</a>
-
 </body>
 </html>
