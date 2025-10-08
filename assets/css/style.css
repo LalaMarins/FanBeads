@@ -1,3 +1,4 @@
+/* Importa as duas fontes de uma só vez para melhor performance */
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&family=Patrick+Hand+SC&display=swap');
 
 /* ==========================================================================
@@ -11,7 +12,7 @@
 }
 
 body {
-  font-family: 'Nunito', sans-serif; /* FONTE PADRÃO APLICADA AQUI */
+  font-family: 'Nunito', sans-serif;
   background: #f9f9f9;
   color: #333;
 }
@@ -30,7 +31,7 @@ header .brand {
 }
 
 header .brand h1 {
-  font-family: 'Patrick Hand SC', cursive; /* Fonte especial para o título */
+  font-family: 'Patrick Hand SC', cursive;
   font-weight: normal; 
   margin: 0;
   font-size: 3.2rem;
@@ -50,7 +51,7 @@ nav.main-menu {
 }
 
 nav.main-menu a {
-  font-weight: 600; /* Apenas o peso é necessário, a fonte vem do 'body' */
+  font-weight: 600;
   font-size: 1rem;
   color: #fff;
   text-decoration: none;
@@ -71,17 +72,18 @@ nav.main-menu a:hover {
    3. COMPONENTES REUTILIZÁVEIS
    ========================================================================== */
 
-/* --- Grid de Cards --- */
+/* --- Grid de Cards (VERSÃO COM FLEXBOX) --- */
 .cards {
-  display: grid;
-  --card-width: 200px; 
-  grid-template-columns: repeat(auto-fill, var(--card-width));
+  display: flex;             /* Usa o contexto Flexbox */
+  flex-wrap: wrap;           /* Permite que os cards quebrem a linha */
+  justify-content: center;   /* Centraliza os cards horizontalmente */
   gap: 2rem;
   padding: 0 2rem 2rem;
-  justify-content: center;
 }
 
+/* É necessário definir o tamanho no item-filho (card) e não no contêiner-pai */
 .card {
+  flex-basis: 200px; /* Define a largura base de cada card como 200px */
   background: #ebf4ff;
   border-radius: 0.75rem;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -113,7 +115,7 @@ nav.main-menu a:hover {
 
 /* --- Botões Gerais --- */
 button {
-  font-family: 'Nunito', sans-serif; /* Garante a fonte em botões */
+  font-family: 'Nunito', sans-serif;
   padding: 8px 16px;
   background: #63acff;
   color: #fff;
@@ -159,9 +161,9 @@ section h2 {
   grid-template-columns: repeat(3, var(--card-width));
   margin: 0 auto;
 }
-/* Ajuste de espaçamento para o título "Novidades" */
+
 .novidades h2 {
-  margin-top: 0rem; /* Reduz drasticamente a margem no topo */
+  margin-top: 0.5rem;
 }
 
 /* --- Página de Detalhes do Produto --- */
@@ -192,7 +194,7 @@ section h2 {
   font-weight: 600; 
   font-size: 1.75rem;
   margin-bottom: 0.5rem;
-  text-align: left; /* Título do detalhe alinhado à esquerda */
+  text-align: left;
 }
 
 .details-price {
