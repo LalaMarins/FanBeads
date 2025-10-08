@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&family=Patrick+Hand+SC&display=swap');
+
 /* ==========================================================================
    1. ESTILOS GERAIS E RESET
    ========================================================================== */
@@ -9,7 +11,7 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Nunito', sans-serif; /* FONTE PADRÃO APLICADA AQUI */
   background: #f9f9f9;
   color: #333;
 }
@@ -25,12 +27,19 @@ header {
 
 header .brand {
   text-align: center;
-  padding: 1rem 0 0.5rem;
 }
 
 header .brand h1 {
+  font-family: 'Patrick Hand SC', cursive; /* Fonte especial para o título */
+  font-weight: normal; 
   margin: 0;
-  font-size: 2rem;
+  font-size: 3.2rem;
+  color: #FFFFFF;
+  letter-spacing: 1px;
+}
+
+header .brand h1 span {
+  color: #AD00F9;
 }
 
 nav.main-menu {
@@ -40,35 +49,33 @@ nav.main-menu {
   padding: 0.75rem 2rem;
 }
 
-.menu-left,
-.menu-right {
-  display: flex;
-  align-items: center;
+nav.main-menu a {
+  font-weight: 600; /* Apenas o peso é necessário, a fonte vem do 'body' */
+  font-size: 1rem;
+  color: #fff;
+  text-decoration: none;
+  margin: 0 0.5rem;
 }
 
-.menu-left a,
-.menu-right a,
 .menu-left .pipe,
 .menu-right .pipe {
   margin: 0 0.5rem;
   color: #fff;
-  text-decoration: none;
-  font-weight: 500;
 }
 
-.menu-left a:hover,
-.menu-right a:hover {
+nav.main-menu a:hover {
   text-decoration: underline;
 }
 
 /* ==========================================================================
-   3. COMPONENTES REUTILIZÁVEIS (Cards, Botões, Formulários)
+   3. COMPONENTES REUTILIZÁVEIS
    ========================================================================== */
 
 /* --- Grid de Cards --- */
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  --card-width: 200px; 
+  grid-template-columns: repeat(auto-fill, var(--card-width));
   gap: 2rem;
   padding: 0 2rem 2rem;
   justify-content: center;
@@ -90,9 +97,9 @@ nav.main-menu {
 }
 
 .card h3 {
+  font-weight: 600;
   margin: 1rem 0 0.5rem;
   font-size: 1.1rem;
-  color: #333;
 }
 
 .card p {
@@ -106,6 +113,7 @@ nav.main-menu {
 
 /* --- Botões Gerais --- */
 button {
+  font-family: 'Nunito', sans-serif; /* Garante a fonte em botões */
   padding: 8px 16px;
   background: #63acff;
   color: #fff;
@@ -121,7 +129,7 @@ button:hover {
 
 /* --- Estilos Gerais de Formulário --- */
 fieldset {
-  margin: 20px 0; /* Ajustado para margem vertical */
+  margin: 20px 0;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -136,22 +144,24 @@ legend {
    4. ESTILOS ESPECÍFICOS DAS PÁGINAS
    ========================================================================== */
 
-/* --- Títulos de Seção --- */
+/* --- Títulos de Seção (h1, h2) --- */
 .product-page h1,
+.cart-page h1,
 section h2 {
+  font-weight: 600;
   margin: 1.5rem 2rem 1rem;
   font-size: 1.75rem;
+  text-align: center;
 }
 
 /* --- Página Inicial (Novidades) --- */
-.novidades {
-  text-align: center;
-  padding: 2rem 0;
-}
-
 .novidades .cards {
-  grid-template-columns: repeat(3, 200px); /* Grid específico para novidades */
+  grid-template-columns: repeat(3, var(--card-width));
   margin: 0 auto;
+}
+/* Ajuste de espaçamento para o título "Novidades" */
+.novidades h2 {
+  margin-top: 0rem; /* Reduz drasticamente a margem no topo */
 }
 
 /* --- Página de Detalhes do Produto --- */
@@ -179,19 +189,21 @@ section h2 {
 }
 
 .details-info h1 {
+  font-weight: 600; 
   font-size: 1.75rem;
   margin-bottom: 0.5rem;
+  text-align: left; /* Título do detalhe alinhado à esquerda */
 }
 
 .details-price {
+  font-weight: bold;
+  font-size: 1.25rem;
   display: inline-block;
   background: #63acff;
   color: #fff;
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   margin-bottom: 1rem;
-  font-weight: bold;
-  font-size: 1.25rem;
 }
 
 .details-desc {
@@ -219,6 +231,7 @@ section h2 {
 }
 
 .details-form button {
+  font-weight: 600; 
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
 }
@@ -234,6 +247,7 @@ section h2 {
 }
 
 .form-page h2 {
+  font-weight: 600; 
   text-align: center;
   margin-bottom: 2rem;
 }
@@ -241,15 +255,11 @@ section h2 {
 .form-page label {
   display: block;
   margin-bottom: 1.5rem;
-  font-weight: 500;
+  font-weight: 600;
   color: #555;
 }
 
-.form-page input[type="text"],
-.form-page input[type="number"],
-.form-page input[type="password"],
-.form-page input[type="email"],
-.form-page input[type="file"],
+.form-page input,
 .form-page textarea,
 .form-page select {
   width: 100%;
@@ -261,11 +271,11 @@ section h2 {
 }
 
 .form-page button {
+  font-weight: 600;
   width: 100%;
   margin-top: 1.5rem;
   padding: 0.85rem;
   font-size: 1.1rem;
-  font-weight: bold;
 }
 
 .form-page .link-alternativo {
@@ -279,11 +289,6 @@ section h2 {
   max-width: 800px;
   margin: 2rem auto;
   padding: 0 1rem;
-}
-
-.cart-page h2 {
-  text-align: center;
-  margin-bottom: 1.5rem;
 }
 
 .cart-page .cart-table {
@@ -302,12 +307,11 @@ section h2 {
 
 .cart-page .cart-table th {
   background: #f1f1f1;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .cart-page .cart-table img {
   width: 100px;
-  height: auto;
   display: block;
   margin: 0 auto;
 }
@@ -326,7 +330,7 @@ section h2 {
   width: 30px;
   height: 30px;
   font-weight: bold;
-  padding: 0; /* Reset do padding do botão geral */
+  padding: 0;
 }
 
 .cart-page .cart-table button.remove-btn:hover {
@@ -341,19 +345,19 @@ section h2 {
 }
 
 .cart-page .cart-total {
-  font-size: 1.5rem;
   font-weight: bold;
+  font-size: 1.5rem;
   margin-bottom: 1rem;
 }
 
 .cart-page .btn-finalizar {
+  font-weight: bold;
   display: inline-block;
   background: #28a745;
   color: #fff;
   text-decoration: none;
   padding: 0.85rem 1.75rem;
   border-radius: 4px;
-  font-weight: bold;
   transition: background-color 0.2s;
 }
 
@@ -362,13 +366,7 @@ section h2 {
 }
 
 /* --- Controle de Largura das Colunas do Carrinho --- */
-.cart-page .cart-table th:nth-child(1),
 .cart-page .cart-table td:nth-child(1) { width: 120px; } /* Foto */
-
-.cart-page .cart-table th:nth-child(2) { width: 30%; } /* Produto */
-
-.cart-page .cart-table th:nth-child(6),
-.cart-page .cart-table td:nth-child(6) { width: 90px; } /* Quantidade */
-
-.cart-page .cart-table th:nth-child(8),
-.cart-page .cart-table td:nth-child(8) { width: 60px; } /* Remover */
+.cart-page .cart-table th:nth-child(2) { width: 30%; }   /* Produto */
+.cart-page .cart-table td:nth-child(6) { width: 90px; }  /* Quantidade */
+.cart-page .cart-table td:nth-child(8) { width: 60px; }  /* Remover */

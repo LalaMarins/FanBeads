@@ -4,7 +4,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 ?>
 <header>
-  <div class="brand"><h1>FanBeads</h1></div>
+<div class="brand"><h1>Fan<span> Beads</span></h1></div>
   <nav class="main-menu">
     <div class="menu-left">
       <a href="/fanbeads/">Início</a>
@@ -13,7 +13,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
       <span class="pipe">|</span>
       <a href="/fanbeads/pulseiras">Pulseiras</a>
       <span class="pipe">|</span>
-      <a href="/fanbeads/phonestraps">Phone Straps</a>
+      <a href="/fanbeads/chaveiros">Chaveiros</a>
 
       <?php if (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin'): ?>
         <span class="pipe">|</span>
@@ -35,7 +35,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
       <?php else: ?>
         <a href="/fanbeads/login">Login</a>
         <span class="pipe">|</span>
-        <a href="/fanbeads/register">Cadastrar</a>
+        <a href="/fanbeads/cadastrar">Cadastrar</a>
       <?php endif; ?>
     </div>
 </header>

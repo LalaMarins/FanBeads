@@ -1,5 +1,5 @@
 <?php
-// rotas.php
+
 
 class rotas
 {
@@ -44,10 +44,10 @@ $rotas->get('/', [inicioController::class, 'index']);
 // === Produtos ===
 $rotas->get('/produtos',              [produtoController::class, 'listar']);
 $rotas->get('/produtos/pulseiras',    [produtoController::class, 'listarPulseiras']);
-$rotas->get('/produtos/phonestraps',  [produtoController::class, 'listarPhoneStraps']);
+$rotas->get('/produtos/chaveiros',  [produtoController::class, 'listarChaveiros']);
 // aliases sem /produtos prefixo
 $rotas->get('/pulseiras',             [produtoController::class, 'listarPulseiras']);
-$rotas->get('/phonestraps',           [produtoController::class, 'listarPhoneStraps']);
+$rotas->get('/chaveiros',           [produtoController::class, 'listarChaveiros']);
 
 $rotas->get('/detalhes',              [produtoController::class, 'detalhes']);
 $rotas->get('/produtos/novo', [produtoController::class,  'novo']);
@@ -59,8 +59,8 @@ $rotas->post('/produto/excluir', [produtoController::class, 'excluir']);
 // === Autenticação ===
 $rotas->get('/login',                 [AuthController::class, 'loginForm']);
 $rotas->post('/login',                [AuthController::class, 'login']);
-$rotas->get('/cadastrar',             [AuthController::class, 'registerForm']);
-$rotas->post('/cadastrar',            [AuthController::class, 'register']);
+$rotas->get('/cadastrar',             [AuthController::class, 'cadastrarForm']);
+$rotas->post('/cadastrar',            [AuthController::class, 'cadastrar']);
 $rotas->get('/logout',                [AuthController::class, 'logout']);
 
 // === Carrinho ===

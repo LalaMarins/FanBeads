@@ -61,13 +61,13 @@ class AuthController
     }
 
     // Exibe formulário de cadastro
-    public function registerForm(): void
+    public function cadastrarForm(): void
     {
         require 'Views/register.php';
     }
 
     // Processa submissão de cadastro
-    public function register(): void
+    public function cadastrar(): void
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
             session_start();

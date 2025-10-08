@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>FanBeads – Início</title>
+  <title>Fan Beads – Início</title>
   <link rel="stylesheet" href="assets/css/style.css">
 
 </head>

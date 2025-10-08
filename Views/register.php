@@ -11,7 +11,7 @@
 
   <main class="form-page">
     <h2>Cadastre-se</h2>
-    <form action="/fanbeads/register" method="POST">
+    <form action="/fanbeads/cadastrar" method="POST">
       <label>
         Usuário:
         <input type="text" name="username" required>

@@ -30,12 +30,12 @@ class produtoController
         require 'Views/listar_produtos.php';
     }
 
-    public function listarPhoneStraps(): void
-    {
-        $produtos      = $this->dao->buscarPorCategoria('Phone Straps');
-        $categoriaNome = 'Phone Straps';
-        require 'Views/listar_produtos.php';
-    }
+public function listarChaveiros(): void
+{
+    $produtos = $this->dao->buscarPorCategoria('Chaveiros');
+    $categoriaNome = 'Chaveiros'; // Define um título específico.
+    require 'Views/listar_produtos.php'; // Reutiliza a view de listagem.
+}
 
     public function detalhes(): void
     {

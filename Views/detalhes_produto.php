@@ -59,7 +59,7 @@
 <?php endif; ?>
 
 
-<?php if ($categoria->getNome() !== 'Phone Straps'): ?>
+<?php if ($categoria->getNome() !== 'Chaveiros'): ?>
     <fieldset class="tamanho-fieldset">
       <legend>Tamanho</legend>
       <?php foreach ([14,15,16,17,18,19,20,21,22] as $tam): ?>
