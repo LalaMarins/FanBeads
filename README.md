@@ -75,7 +75,7 @@ Siga os passos abaixo para configurar o ambiente e executar o projeto.
 
 1.  **Clone o Repositório:**
     ```bash
-    git clone [URL_DO_SEU_REPOSITORIO] fanbeads
+    git clone https://github.com/LalaMarins/FanBeads
     ```
     Ou baixe o ZIP e extraia para a pasta `htdocs` ou `www`.
 
