@@ -490,3 +490,114 @@ section h2 {
 .btn-back-to-store:hover {
   background: #5a9be0;
 }
+
+/* ==========================================================================
+   6. PÁGINA DE HISTÓRICO DE PEDIDOS
+   ========================================================================== */
+
+.order-history-page {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.no-orders-message {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+  padding: 3rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.order-card {
+  background: #fff;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #eee;
+}
+
+.order-card-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.order-card-header span {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.header-total {
+  text-align: right;
+}
+
+.header-total strong {
+  font-size: 1.2rem;
+}
+
+.status {
+  display: block;
+  margin-top: 0.25rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+  background: #6c757d; /* Cor padrão */
+}
+
+.status-processando {
+  background: #007bff; /* Azul */
+}
+
+/* --- Itens dentro do card --- */
+.order-card-body {
+  padding: 1rem 1.5rem;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 0;
+}
+
+.history-item:not(:last-child) {
+  border-bottom: 1px solid #eee;
+}
+
+.history-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.history-item .item-details {
+  flex-grow: 1;
+}
+
+.history-item .item-name {
+  font-weight: 600;
+}
+
+.history-item .item-options {
+  display: block;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.history-item .item-price {
+  font-weight: 600;
+}

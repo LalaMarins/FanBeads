@@ -71,4 +71,4 @@ $rotas->post('/carrinho/remover',     [carrinhoController::class, 'remover']);
 
 $rotas->get('/pedido/feito', [PedidoController::class, 'feito']);
 $rotas->post('/pedido/feito', [PedidoController::class, 'feito']);
-
+$rotas->get('/meus-pedidos', [PedidoController::class, 'historico']);
