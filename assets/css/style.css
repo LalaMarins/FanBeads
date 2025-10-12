@@ -372,3 +372,121 @@ section h2 {
 .cart-page .cart-table th:nth-child(2) { width: 30%; }   /* Produto */
 .cart-page .cart-table td:nth-child(6) { width: 90px; }  /* Quantidade */
 .cart-page .cart-table td:nth-child(8) { width: 60px; }  /* Remover */
+
+/* ==========================================================================
+   5. PÁGINA DE CONFIRMAÇÃO DE PEDIDO
+   ========================================================================== */
+
+.order-confirmation-page {
+  max-width: 700px;
+  margin: 2rem auto;
+  background: #fff;
+  padding: 2.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.order-header {
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.order-header h2 {
+  font-size: 2rem;
+  color: #28a745; /* Verde para sucesso */
+}
+
+.order-header p {
+  font-size: 1.1rem;
+  color: #555;
+  margin-top: 0.5rem;
+}
+
+.order-summary h3 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.order-summary-list {
+  list-style: none;
+  padding: 0;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.order-item:last-child {
+  border-bottom: none;
+}
+
+.order-item .item-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.order-item .item-details {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.order-item .item-name {
+  font-weight: 600;
+}
+
+.order-item .item-qty,
+.order-item .item-options {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.order-item .item-subtotal {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.order-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 1.5rem 0;
+  border-top: 2px solid #333;
+  margin-top: 1rem;
+}
+
+.order-footer {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.order-footer p {
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+.btn-back-to-store {
+  display: inline-block;
+  background: #63acff;
+  color: #fff;
+  text-decoration: none;
+  padding: 0.85rem 1.75rem;
+  border-radius: 4px;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.btn-back-to-store:hover {
+  background: #5a9be0;
+}
