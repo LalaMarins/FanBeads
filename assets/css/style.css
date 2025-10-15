@@ -1,9 +1,39 @@
-/* Importa as duas fontes de uma só vez para melhor performance */
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&family=Patrick+Hand+SC&display=swap');
+/* Importa as fontes do Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Patrick+Hand+SC&display=swap');
 
 /* ==========================================================================
-   1. ESTILOS GERAIS E RESET
+   1. VARIÁVEIS GLOBAIS E RESET
    ========================================================================== */
+
+:root {
+  /* Paleta de Cores */
+  --color-primary: #63acff;
+  --color-primary-dark: #5a9be0;
+  --color-secondary: #AD00F9;
+  --color-success: #28a745;
+  --color-success-dark: #218838;
+  --color-danger: #ff6363;
+  --color-danger-dark: #e04a4a;
+  --color-info: #6c757d;
+  --color-info-dark: #5a6268;
+
+  --color-light-bg: #f9f9f9;
+  --color-card-bg: #ebf4ff;
+  --color-white: #fff;
+  --color-text: #333;
+  --color-text-muted: #666;
+  --color-border: #ddd;
+  --color-table-header: #f1f1f1;
+
+  /* Tipografia */
+  --font-body: 'Nunito', sans-serif;
+  --font-heading: 'Patrick Hand SC', cursive;
+
+  /* Outras Variáveis */
+  --border-radius: 0.75rem;
+  --card-width: 200px;
+  --gap: 2rem;
+}
 
 * {
   box-sizing: border-box;
@@ -12,9 +42,9 @@
 }
 
 body {
-  font-family: 'Nunito', sans-serif;
-  background: #f9f9f9;
-  color: #333;
+  font-family: var(--font-body);
+  background-color: var(--color-light-bg);
+  color: var(--color-text);
 }
 
 /* ==========================================================================
@@ -22,8 +52,8 @@ body {
    ========================================================================== */
 
 header {
-  background: #63acff;
-  color: #fff;
+  background-color: var(--color-primary);
+  color: var(--color-white);
 }
 
 header .brand {
@@ -31,16 +61,14 @@ header .brand {
 }
 
 header .brand h1 {
-  font-family: 'Patrick Hand SC', cursive;
+  font-family: var(--font-heading);
   font-weight: normal; 
-  margin: 0;
   font-size: 3.2rem;
-  color: #FFFFFF;
   letter-spacing: 1px;
 }
 
 header .brand h1 span {
-  color: #AD00F9;
+  color: var(--color-secondary);
 }
 
 nav.main-menu {
@@ -53,7 +81,7 @@ nav.main-menu {
 nav.main-menu a {
   font-weight: 600;
   font-size: 1rem;
-  color: #fff;
+  color: var(--color-white);
   text-decoration: none;
   margin: 0 0.5rem;
 }
@@ -61,7 +89,7 @@ nav.main-menu a {
 .menu-left .pipe,
 .menu-right .pipe {
   margin: 0 0.5rem;
-  color: #fff;
+  color: var(--color-white);
 }
 
 nav.main-menu a:hover {
@@ -72,20 +100,19 @@ nav.main-menu a:hover {
    3. COMPONENTES REUTILIZÁVEIS
    ========================================================================== */
 
-/* --- Grid de Cards (VERSÃO COM FLEXBOX) --- */
+/* --- Grid de Cards (usando Flexbox) --- */
 .cards {
-  display: flex;             /* Usa o contexto Flexbox */
-  flex-wrap: wrap;           /* Permite que os cards quebrem a linha */
-  justify-content: center;   /* Centraliza os cards horizontalmente */
-  gap: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap);
   padding: 0 2rem 2rem;
 }
 
-/* É necessário definir o tamanho no item-filho (card) e não no contêiner-pai */
 .card {
-  flex-basis: 200px; /* Define a largura base de cada card como 200px */
-  background: #ebf4ff;
-  border-radius: 0.75rem;
+  flex-basis: var(--card-width);
+  background-color: var(--color-card-bg);
+  border-radius: var(--border-radius);
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   overflow: hidden;
   text-align: center;
@@ -99,66 +126,119 @@ nav.main-menu a:hover {
 }
 
 .card h3 {
-  font-weight: 600;
-  margin: 1rem 0 0.5rem;
+  font-weight: 700;
+  margin: 1rem 0.5rem 0.5rem;
   font-size: 1.1rem;
 }
 
 .card p {
   display: inline-block;
-  background: #63acff;
-  color: #fff;
+  background-color: var(--color-primary);
+  color: var(--color-white);
   padding: 0.25rem 0.5rem;
   border-radius: 0.5rem;
   font-weight: bold;
 }
 
-/* --- Botões Gerais --- */
-button {
-  font-family: 'Nunito', sans-serif;
-  padding: 8px 16px;
-  background: #63acff;
-  color: #fff;
+/* --- Sistema de Botões --- */
+.btn {
+  font-family: var(--font-body);
+  padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1rem;
+  display: inline-block;
 }
 
-button:hover {
-  background: #5a9be0;
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.btn-success {
+  background-color: var(--color-success);
+  color: var(--color-white);
+}
+.btn-success:hover {
+  background-color: var(--color-success-dark);
+}
+
+.btn-danger {
+  background-color: var(--color-danger);
+  color: var(--color-white);
+}
+.btn-danger:hover {
+  background-color: var(--color-danger-dark);
+}
+
+.btn-secondary {
+  background-color: var(--color-info);
+  color: var(--color-white);
+}
+.btn-secondary:hover {
+  background-color: var(--color-info-dark);
+}
+
+/* --- Mensagens de Alerta --- */
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 1rem;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 1rem;
+  border: 1px solid #c3e6cb;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  text-align: center;
 }
 
 /* --- Estilos Gerais de Formulário --- */
 fieldset {
   margin: 20px 0;
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
 }
 
 legend {
   font-weight: bold;
   margin-bottom: 10px;
+  padding: 0 0.5em;
 }
 
 /* ==========================================================================
    4. ESTILOS ESPECÍFICOS DAS PÁGINAS
    ========================================================================== */
 
-/* --- Títulos de Seção (h1, h2) --- */
+/* --- Títulos de Seção --- */
 .product-page h1,
 .cart-page h1,
+.order-history-page h1,
 section h2 {
-  font-weight: 600;
-  margin: 1.5rem 2rem 1rem;
+  font-weight: 700;
+  margin: 1.5rem 2rem;
   font-size: 1.75rem;
   text-align: center;
 }
 
 /* --- Página Inicial (Novidades) --- */
 .novidades .cards {
-  grid-template-columns: repeat(3, var(--card-width));
+  max-width: calc( (var(--card-width) * 3) + (var(--gap) * 2) );
   margin: 0 auto;
 }
 
@@ -176,22 +256,17 @@ section h2 {
   margin: 0 auto;
 }
 
-.details-image {
-  flex: 1 1 300px;
-}
+.details-image { flex: 1 1 300px; }
+.details-info  { flex: 1 1 300px; }
 
 .details-image img {
   width: 100%;
-  border-radius: 0.75rem;
+  border-radius: var(--border-radius);
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.details-info {
-  flex: 1 1 300px;
-}
-
 .details-info h1 {
-  font-weight: 600; 
+  font-weight: 700; 
   font-size: 1.75rem;
   margin-bottom: 0.5rem;
   text-align: left;
@@ -201,8 +276,8 @@ section h2 {
   font-weight: bold;
   font-size: 1.25rem;
   display: inline-block;
-  background: #63acff;
-  color: #fff;
+  background-color: var(--color-primary);
+  color: var(--color-white);
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   margin-bottom: 1rem;
@@ -228,28 +303,22 @@ section h2 {
 .details-form .t-extra input[type="text"] {
   margin-left: 0.5rem;
   padding: 0.25rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
-}
-
-.details-form button {
-  font-weight: 600; 
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
 }
 
 /* --- Páginas de Formulário (Login, Cadastro, Novo Produto) --- */
 .form-page {
   max-width: 450px;
   margin: 2rem auto;
-  background: #fff;
+  background: var(--color-white);
   padding: 2rem 2.5rem;
-  border-radius: 0.75rem;
+  border-radius: var(--border-radius);
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .form-page h2 {
-  font-weight: 600; 
+  font-weight: 700; 
   text-align: center;
   margin-bottom: 2rem;
 }
@@ -258,26 +327,24 @@ section h2 {
   display: block;
   margin-bottom: 1.5rem;
   font-weight: 600;
-  color: #555;
+  color: var(--color-text-muted);
 }
 
 .form-page input,
 .form-page textarea,
 .form-page select {
+  font-family: var(--font-body);
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 1rem;
   margin-top: 0.5rem;
 }
 
-.form-page button {
-  font-weight: 600;
+.form-page button[type="submit"] {
   width: 100%;
   margin-top: 1.5rem;
-  padding: 0.85rem;
-  font-size: 1.1rem;
 }
 
 .form-page .link-alternativo {
@@ -293,56 +360,58 @@ section h2 {
   padding: 0 1rem;
 }
 
-.cart-page .cart-table {
+.cart-table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 1.5rem;
 }
 
-.cart-page .cart-table th,
-.cart-page .cart-table td {
-  border: 1px solid #ddd;
+.cart-table th,
+.cart-table td {
+  border: 1px solid var(--color-border);
   padding: 0.75rem;
   text-align: center;
   vertical-align: middle;
 }
 
-.cart-page .cart-table th {
-  background: #f1f1f1;
+.cart-table th {
+  background-color: var(--color-table-header);
   font-weight: 600;
 }
 
-.cart-page .cart-table img {
+.cart-table img {
   width: 100px;
   display: block;
   margin: 0 auto;
 }
 
-.cart-page .cart-table input[type="number"] {
+.cart-table input[type="number"] {
   width: 60px;
   padding: 0.25rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
+  text-align: center;
 }
 
-.cart-page .cart-table button.remove-btn {
-  background-color: #ff6363;
-  color: white;
+.cart-table .remove-btn {
+  background-color: var(--color-danger);
+  color: var(--color-white);
   border-radius: 50%;
   width: 30px;
   height: 30px;
   font-weight: bold;
   padding: 0;
+  border: none;
+  cursor: pointer;
 }
-
-.cart-page .cart-table button.remove-btn:hover {
-  background-color: #e04a4a;
+.cart-table .remove-btn:hover {
+  background-color: var(--color-danger-dark);
 }
 
 .cart-page .cart-actions {
   margin-top: 2rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid var(--color-border);
   text-align: right;
 }
 
@@ -352,22 +421,6 @@ section h2 {
   margin-bottom: 1rem;
 }
 
-.cart-page .btn-finalizar {
-  font-weight: bold;
-  display: inline-block;
-  background: #28a745;
-  color: #fff;
-  text-decoration: none;
-  padding: 0.85rem 1.75rem;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-
-.cart-page .btn-finalizar:hover {
-  background: #218838;
-}
-
-/* --- Controle de Largura das Colunas do Carrinho --- */
 .cart-page .cart-table td:nth-child(1) { width: 120px; } /* Foto */
 .cart-page .cart-table th:nth-child(2) { width: 30%; }   /* Produto */
 .cart-page .cart-table td:nth-child(6) { width: 90px; }  /* Quantidade */
@@ -380,9 +433,9 @@ section h2 {
 .order-confirmation-page {
   max-width: 700px;
   margin: 2rem auto;
-  background: #fff;
+  background: var(--color-white);
   padding: 2.5rem;
-  border-radius: 0.75rem;
+  border-radius: var(--border-radius);
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
@@ -395,19 +448,18 @@ section h2 {
 
 .order-header h2 {
   font-size: 2rem;
-  color: #28a745; /* Verde para sucesso */
+  color: var(--color-success);
 }
 
 .order-header p {
   font-size: 1.1rem;
-  color: #555;
+  color: var(--color-text-muted);
   margin-top: 0.5rem;
 }
 
 .order-summary h3 {
   font-size: 1.25rem;
   margin-bottom: 1rem;
-  color: #333;
 }
 
 .order-summary-list {
@@ -422,7 +474,6 @@ section h2 {
   padding: 1rem 0;
   border-bottom: 1px solid #eee;
 }
-
 .order-item:last-child {
   border-bottom: none;
 }
@@ -447,7 +498,7 @@ section h2 {
 .order-item .item-qty,
 .order-item .item-options {
   font-size: 0.9rem;
-  color: #666;
+  color: var(--color-text-muted);
 }
 
 .order-item .item-subtotal {
@@ -462,7 +513,7 @@ section h2 {
   font-size: 1.5rem;
   font-weight: bold;
   padding: 1.5rem 0;
-  border-top: 2px solid #333;
+  border-top: 2px solid var(--color-text);
   margin-top: 1rem;
 }
 
@@ -472,23 +523,15 @@ section h2 {
 }
 
 .order-footer p {
-  color: #555;
+  color: var(--color-text-muted);
   margin-bottom: 1.5rem;
 }
 
-.btn-back-to-store {
-  display: inline-block;
-  background: #63acff;
-  color: #fff;
-  text-decoration: none;
-  padding: 0.85rem 1.75rem;
-  border-radius: 4px;
-  font-weight: bold;
-  transition: background-color 0.2s;
+.order-footer .btn { /* re-usa o componente de botão */
+  background-color: var(--color-primary);
 }
-
-.btn-back-to-store:hover {
-  background: #5a9be0;
+.order-footer .btn:hover {
+  background-color: var(--color-primary-dark);
 }
 
 /* ==========================================================================
@@ -504,15 +547,15 @@ section h2 {
 .no-orders-message {
   text-align: center;
   font-size: 1.2rem;
-  color: #666;
+  color: var(--color-text-muted);
   padding: 3rem;
-  background: #fff;
+  background: var(--color-white);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .order-card {
-  background: #fff;
+  background: var(--color-white);
   border-radius: 8px;
   margin-bottom: 2rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -524,7 +567,7 @@ section h2 {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.5rem;
-  background: #f8f9fa;
+  background-color: #f8f9fa;
   border-bottom: 1px solid #eee;
 }
 
@@ -535,7 +578,7 @@ section h2 {
 
 .order-card-header span {
   font-size: 0.9rem;
-  color: #666;
+  color: var(--color-text-muted);
 }
 
 .header-total {
@@ -553,15 +596,14 @@ section h2 {
   border-radius: 4px;
   font-size: 0.8rem;
   font-weight: 600;
-  color: #fff;
-  background: #6c757d; /* Cor padrão */
+  color: var(--color-white);
+  background: var(--color-info); /* Cor padrão */
 }
 
 .status-processando {
   background: #007bff; /* Azul */
 }
 
-/* --- Itens dentro do card --- */
 .order-card-body {
   padding: 1rem 1.5rem;
 }
@@ -572,7 +614,6 @@ section h2 {
   gap: 1rem;
   padding: 0.75rem 0;
 }
-
 .history-item:not(:last-child) {
   border-bottom: 1px solid #eee;
 }
@@ -595,7 +636,7 @@ section h2 {
 .history-item .item-options {
   display: block;
   font-size: 0.9rem;
-  color: #666;
+  color: var(--color-text-muted);
 }
 
 .history-item .item-price {

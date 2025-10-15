@@ -1,74 +1,65 @@
 <?php
-
-
-class rotas
+class Router
 {
-    private array $rotas = [];
+    private array $routes = [];
 
-    public function get(string $path, array $call): void
+    public function get(string $path, array $handler): void
     {
-        $this->rotas['GET'][$path] = $call;
+        $this->routes['GET'][$path] = $handler;
     }
 
-    public function post(string $path, array $call): void
+    public function post(string $path, array $handler): void
     {
-        $this->rotas['POST'][$path] = $call;
+        $this->routes['POST'][$path] = $handler;
     }
 
-    public function verificar_rota(string $method, string $uri): void
+    public function handleRequest(string $method, string $uri): void
     {
-        if (isset($this->rotas[$method][$uri])) {
-            [$class, $func] = $this->rotas[$method][$uri];
+        if (isset($this->routes[$method][$uri])) {
+            [$class, $func] = $this->routes[$method][$uri];
             (new $class)->$func();
         } else {
             http_response_code(404);
-            echo "Rota inválida: {$uri}";
+            // Para um projeto final, é ideal ter uma página de erro bonita.
+            // require 'Views/404.php';
+            echo "Erro 404: Página não encontrada.";
         }
     }
 }
 
-// carrega controllers
-require_once 'Controllers/inicioController.class.php';
-require_once 'Controllers/produtoController.class.php';
-require_once 'Controllers/carrinhoController.class.php';
-require_once 'Controllers/AuthController.class.php';
-require_once 'Controllers/pedidoController.class.php';
+// === Instancia o roteador ===
+$router = new Router();
 
+// === Definição das Rotas ===
 
-// instancia roteador
-$rotas = new rotas();
+// --- Páginas Gerais ---
+$router->get('/', [InicioController::class, 'index']);
+$router->get('/detalhes', [ProdutoController::class, 'detalhes']);
 
-// === Página Inicial ===
-$rotas->get('/', [inicioController::class, 'index']);
+// --- Produtos (Padrão CRUD) ---
+$router->get('/produtos', [ProdutoController::class, 'listar']);
+$router->get('/pulseiras', [ProdutoController::class, 'listarPulseiras']);
+$router->get('/chaveiros', [ProdutoController::class, 'listarChaveiros']);
 
-// === Produtos ===
-$rotas->get('/produtos',              [produtoController::class, 'listar']);
-$rotas->get('/produtos/pulseiras',    [produtoController::class, 'listarPulseiras']);
-$rotas->get('/produtos/chaveiros',  [produtoController::class, 'listarChaveiros']);
-// aliases sem /produtos prefixo
-$rotas->get('/pulseiras',             [produtoController::class, 'listarPulseiras']);
-$rotas->get('/chaveiros',           [produtoController::class, 'listarChaveiros']);
+// --- Produtos (Admin) ---
+$router->get('/produtos/novo', [ProdutoController::class, 'novo']);      
+$router->post('/produtos/criar', [ProdutoController::class, 'criar']);   
+$router->post('/produtos/excluir', [ProdutoController::class, 'excluir']); 
 
-$rotas->get('/detalhes',              [produtoController::class, 'detalhes']);
-$rotas->get('/produtos/novo', [produtoController::class,  'novo']);
-$rotas->post('/produtos/novo',[produtoController::class,  'criar']);
-$rotas->post('/produto/excluir', [produtoController::class, 'excluir']);
+// --- Autenticação ---
+$router->get('/login', [AuthController::class, 'loginForm']);
+$router->post('/login', [AuthController::class, 'login']);
+$router->get('/register', [AuthController::class, 'registerForm']);
+$router->post('/register', [AuthController::class, 'register']);
+$router->get('/logout', [AuthController::class, 'logout']);
 
+// --- Carrinho ---
+$router->get('/carrinho', [CarrinhoController::class, 'index']);
+$router->post('/carrinho/adicionar', [CarrinhoController::class, 'adicionar']);
+$router->post('/carrinho/atualizar', [CarrinhoController::class, 'atualizar']);
+$router->post('/carrinho/remover', [CarrinhoController::class, 'remover']);
 
-
-// === Autenticação ===
-$rotas->get('/login',                 [AuthController::class, 'loginForm']);
-$rotas->post('/login',                [AuthController::class, 'login']);
-$rotas->get('/cadastrar',             [AuthController::class, 'cadastrarForm']);
-$rotas->post('/cadastrar',            [AuthController::class, 'cadastrar']);
-$rotas->get('/logout',                [AuthController::class, 'logout']);
-
-// === Carrinho ===
-$rotas->post('/adicionar_carrinho',   [carrinhoController::class, 'adicionar']);
-$rotas->get('/carrinho',              [carrinhoController::class, 'index']);
-$rotas->post('/carrinho/atualizar',   [carrinhoController::class, 'atualizar']);
-$rotas->post('/carrinho/remover',     [carrinhoController::class, 'remover']);
-
-$rotas->get('/pedido/feito', [PedidoController::class, 'feito']);
-$rotas->post('/pedido/feito', [PedidoController::class, 'feito']);
-$rotas->get('/meus-pedidos', [PedidoController::class, 'historico']);
+// --- Pedidos ---
+$router->get('/meus-pedidos', [PedidoController::class, 'historico']);
+$router->post('/pedido/finalizar', [PedidoController::class, 'finalizar']); 
+$router->get('/pedido/sucesso', [PedidoController::class, 'sucesso']);    

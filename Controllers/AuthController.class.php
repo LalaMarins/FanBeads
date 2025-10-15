@@ -1,94 +1,108 @@
 <?php
-require_once 'Models/Conexao.class.php';
-require_once 'Models/UsuarioDAO.class.php';
-require_once 'Models/Usuario.class.php';
-
 class AuthController
 {
-    private PDO $db;
+    private UsuarioDAO $usuarioDAO;
 
     public function __construct()
     {
+        // Garante que a sessão seja iniciada sempre que o controller for usado.
         if (session_status() !== PHP_SESSION_ACTIVE) {
             session_start();
         }
-        $this->db = Conexao::getInstancia();
+        
+        // O autoloader já carrega o UsuarioDAO, então podemos instanciá-lo aqui.
+        // O DAO agora é uma propriedade do controller, evitando recriá-lo em cada método.
+        $this->usuarioDAO = new UsuarioDAO(Conexao::getInstancia());
     }
 
-    // Exibe formulário de login
+    /**
+     * Exibe o formulário de login.
+     */
     public function loginForm(): void
     {
         require 'Views/login.php';
     }
 
-    // Processa submissão de login
+    /**
+     * Processa os dados enviados pelo formulário de login.
+     */
     public function login(): void
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
+        $username = trim($_POST['username'] ?? '');
+        $password = $_POST['senha'] ?? '';
 
-        $user = trim($_POST['username'] ?? '');
-        $pass = $_POST['senha']     ?? '';
+        // Busca o usuário no banco de dados.
+        $user = $this->usuarioDAO->findByUsername($username);
 
-        $dao = new UsuarioDAO($this->db);
-        $u   = $dao->findByUsername($user);
-
-        // usa propriedade pública senha
-        if ($u && password_verify($pass, $u->senha)) {
+        // Verifica se o usuário existe e se a senha está correta.
+        // Usa o getter getSenha() para acessar a propriedade privada (encapsulamento).
+        if ($user && password_verify($password, $user->getSenha())) {
+            // Se as credenciais estiverem corretas, armazena os dados do usuário na sessão.
             $_SESSION['user'] = [
-                'id'       => $u->getId(),
-                'username' => $u->getUsername(),
-                'role'     => $u->getRole(),
+                'id'       => $user->getId(),
+                'username' => $user->getUsername(),
+                'role'     => $user->getRole(),
             ];
             header('Location: /fanbeads/');
             exit;
         }
 
-        $error = 'Credenciais inválidas';
+        // Se o login falhar, exibe novamente o formulário com uma mensagem de erro.
+        $loginError = 'Usuário ou senha inválidos.';
         require 'Views/login.php';
     }
 
-    // Faz logout
-    public function logout(): void
-    {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
-        session_destroy();
-        header('Location: /fanbeads/');
-        exit;
-    }
-
-    // Exibe formulário de cadastro
-    public function cadastrarForm(): void
+    /**
+     * Exibe o formulário de cadastro.
+     * Renomeado de 'cadastrarForm' para 'registerForm' para consistência.
+     */
+    public function registerForm(): void
     {
         require 'Views/register.php';
     }
 
-    // Processa submissão de cadastro
-    public function cadastrar(): void
+    /**
+     * Processa os dados enviados pelo formulário de cadastro.
+     * Renomeado de 'cadastrar' para 'register' para consistência.
+     */
+    public function register(): void
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
+        $username = trim($_POST['username'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $password = $_POST['senha'] ?? '';
+
+        // Validação básica (em um projeto real, a validação seria mais complexa).
+        if (empty($username) || empty($email) || empty($password)) {
+            // Lógica de erro: redirecionar de volta com uma mensagem.
+            header('Location: /fanbeads/register?error=campos_vazios');
+            exit;
         }
 
-        $user  = trim($_POST['username'] ?? '');
-        $email = trim($_POST['email']    ?? '');
-        $pass  = $_POST['senha']         ?? '';
-        $hash  = password_hash($pass, PASSWORD_DEFAULT);
+        // Cria o hash da senha de forma segura.
+        $hash = password_hash($password, PASSWORD_DEFAULT);
 
-        $u = new Usuario();
-        // atribui diretamente às propriedades públicas
-        $u->username = $user;
-        $u->email    = $email;
-        $u->senha    = $hash;
-        $u->role     = 'user';
+        // Cria um novo objeto Usuario e popula com os setters (encapsulamento).
+        $newUser = new Usuario();
+        $newUser->setUsername($username);
+        $newUser->setEmail($email);
+        $newUser->setSenha($hash);
+        $newUser->setRole('user'); // Define o papel padrão para novos usuários.
 
-        $dao = new UsuarioDAO($this->db);
-        $dao->insert($u);
+        // Insere o novo usuário no banco de dados.
+        $this->usuarioDAO->insert($newUser);
 
-        header('Location: /fanbeads/login');
+        // Redireciona para a página de login para que o novo usuário possa entrar.
+        header('Location: /fanbeads/login?success=cadastro_ok');
+        exit;
+    }
+
+    /**
+     * Encerra a sessão do usuário (faz o logout).
+     */
+    public function logout(): void
+    {
+        session_destroy();
+        header('Location: /fanbeads/');
         exit;
     }
 }

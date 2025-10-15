@@ -1,34 +1,42 @@
 <?php
-require_once 'Models/Pedidos.class.php';
-require_once 'Models/PedidoItem.class.php';
-require_once 'Models/PedidoDAO.class.php';
+// Controllers/pedidoController.class.php
 
-class PedidoController {
-    
-    public function feito() {
+/**
+ * Gerencia a finalização de pedidos e o histórico de compras do usuário.
+ */
+class PedidoController
+{
+    private PedidoDAO $pedidoDAO;
+
+    public function __construct()
+    {
         if (session_status() !== PHP_SESSION_ACTIVE) {
             session_start();
         }
-    
-        // --- VALIDAÇÕES ESSENCIAIS ---
-        // 1. O usuário precisa estar logado para finalizar um pedido.
+        $this->pedidoDAO = new PedidoDAO();
+    }
+
+    /**
+     * Processa os dados do carrinho (POST) para criar e salvar um novo pedido.
+     * Após salvar, redireciona para a página de sucesso para evitar reenvio do formulário.
+     */
+    public function finalizar(): void
+    {
+        // --- VALIDAÇÕES ---
         if (!isset($_SESSION['user'])) {
-            header('Location: /fanbeads/login'); // Se não estiver, manda para o login.
+            header('Location: /fanbeads/login');
             exit;
         }
-
-        // 2. O carrinho não pode estar vazio.
         if (empty($_SESSION['cart'])) {
-            header('Location: /fanbeads/'); // Se estiver, manda para a loja.
+            header('Location: /fanbeads/carrinho');
             exit;
         }
 
         // --- MONTAGEM DO PEDIDO ---
         $carrinho = $_SESSION['cart'];
-        $itens_pedido_obj = [];
-        $total_pedido = 0;
+        $itensParaSalvar = [];
+        $totalPedido = 0;
 
-        // Transforma os itens do carrinho (que são arrays) em objetos PedidoItem
         foreach ($carrinho as $itemArray) {
             $itemObj = new PedidoItem();
             $itemObj->setIdProduto($itemArray['produto_id']);
@@ -37,54 +45,74 @@ class PedidoController {
             $itemObj->setCor($itemArray['cor']);
             $itemObj->setTamanho($itemArray['tamanho']);
             
-            $itens_pedido_obj[] = $itemObj; // Adiciona o objeto à lista
-            $total_pedido += $itemArray['preco'] * $itemArray['quantidade'];
+            $itensParaSalvar[] = $itemObj;
+            $totalPedido += $itemArray['preco'] * $itemArray['quantidade'];
         }
 
-        // Cria o objeto Pedido principal
         $pedido = new Pedido();
         $pedido->setIdUsuario($_SESSION['user']['id']);
-        $pedido->setValorTotal($total_pedido);
-        $pedido->setItens($itens_pedido_obj);
+        $pedido->setValorTotal($totalPedido);
+        $pedido->setItens($itensParaSalvar);
 
-        // --- SALVANDO NO BANCO DE DADOS ---
-        $pedidoDAO = new PedidoDAO();
-        $novoPedidoId = $pedidoDAO->criar($pedido);
+        // --- SALVANDO NO BANCO ---
+        $novoPedidoId = $this->pedidoDAO->criar($pedido);
 
-        // --- PREPARANDO A VIEW DE SUCESSO ---
         if ($novoPedidoId) {
-            // Se o pedido foi salvo com sucesso, prepara os dados para a view de confirmação
-            $itens_pedido = $carrinho; // Reutiliza os dados do carrinho para a view
-            $numero_pedido = $novoPedidoId; // Usa o ID real do banco!
-
+            // Se o pedido foi salvo, guarda os detalhes na sessão para a página de sucesso.
+            $_SESSION['pedido_sucesso'] = [
+                'numero_pedido' => $novoPedidoId,
+                'itens_pedido'  => $carrinho,
+                'total_pedido'  => $totalPedido
+            ];
             unset($_SESSION['cart']); // Limpa o carrinho
-    
-            include 'Views/pedido.php'; // Mostra a página de sucesso
-        } else {
-            // Se deu erro ao salvar, pode redirecionar para uma página de erro ou de volta ao carrinho
-            // Por simplicidade, vamos apenas mostrar uma mensagem.
-            echo "<h1>Erro ao processar seu pedido.</h1><p>Por favor, tente novamente.</p>";
+            
+            // Redireciona para a página de sucesso (Padrão Post-Redirect-Get).
+            header('Location: /fanbeads/pedido/sucesso');
             exit;
         }
-    }
-    public function historico()
-{
-    if (session_status() !== PHP_SESSION_ACTIVE) {
-        session_start();
-    }
 
-    // Se o usuário não estiver logado, redireciona para o login
-    if (!isset($_SESSION['user'])) {
-        header('Location: /fanbeads/login');
+        // Se deu erro ao salvar, redireciona de volta para o carrinho com uma mensagem.
+        header('Location: /fanbeads/carrinho?error=falha_pedido');
         exit;
     }
 
-    $idUsuario = $_SESSION['user']['id'];
+    /**
+     * Exibe a página de confirmação de pedido bem-sucedido (GET).
+     */
+    public function sucesso(): void
+    {
+        // Verifica se há dados de um pedido recém-finalizado na sessão.
+        if (!isset($_SESSION['pedido_sucesso'])) {
+            // Se não houver, redireciona para a página inicial para evitar acesso direto.
+            header('Location: /fanbeads/');
+            exit;
+        }
 
-    $pedidoDAO = new PedidoDAO();
-    $pedidos = $pedidoDAO->buscarPorUsuario($idUsuario);
+        // Passa os dados do pedido para variáveis locais.
+        $numero_pedido = $_SESSION['pedido_sucesso']['numero_pedido'];
+        $itens_pedido = $_SESSION['pedido_sucesso']['itens_pedido'];
+        $total_pedido = $_SESSION['pedido_sucesso']['total_pedido'];
 
-    // Carrega a view e passa a lista de pedidos para ela
-    require 'Views/meus_pedidos.php';
-}
+        // Limpa os dados da sessão para que a página não seja exibida novamente ao recarregar.
+        unset($_SESSION['pedido_sucesso']);
+
+        // Renderiza a view de sucesso.
+        require 'Views/pedido.php';
+    }
+
+    /**
+     * Exibe o histórico de pedidos do usuário logado.
+     */
+    public function historico(): void
+    {
+        if (!isset($_SESSION['user'])) {
+            header('Location: /fanbeads/login');
+            exit;
+        }
+
+        $idUsuario = $_SESSION['user']['id'];
+        $pedidos = $this->pedidoDAO->buscarPorUsuario($idUsuario);
+
+        require 'Views/meus_pedidos.php';
+    }
 }

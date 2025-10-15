@@ -6,7 +6,9 @@ class Pedido
     private string $data_pedido;
     private float $valor_total;
     private string $status;
-    private array $itens = []; // Para guardar os itens do pedido
+
+    /** @var array Itens associados a este pedido. */
+    private array $itens = [];
 
     // Getters
     public function getId(): int { return $this->id_pedido; }
