@@ -22,7 +22,7 @@
             <label for="password">Senha:</label>
             <input type="password" id="password" name="senha" required>
 
-            <button type="submit">Criar Conta</button>
+            <button type="submit" class="btn btn-primary">Entrar</button>
         </form>
 
         <div class="link-alternativo">

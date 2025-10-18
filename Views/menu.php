@@ -11,7 +11,11 @@ if (!empty($_SESSION['cart'])) {
 }
 ?>
 <header>
-    <div class="brand"><h1>Fan<span>Beads</span></h1></div>
+    <div class="brand">
+        <a href="/fanbeads/">
+            <h1>Fan<span>Beads</span></h1>
+        </a>
+    </div>
     <nav class="main-menu">
         <div class="menu-left">
             <a href="/fanbeads/">Início</a>

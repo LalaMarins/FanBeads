@@ -105,4 +105,12 @@ class AuthController
         header('Location: /fanbeads/');
         exit;
     }
+    /**
+ * Exibe o formulário para solicitar a recuperação de senha.
+ */
+public function forgotPasswordForm(): void
+{
+    // Simplesmente carrega a view que criaremos a seguir.
+    require 'Views/forgot_password.php';
+}
 }

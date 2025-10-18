@@ -30,10 +30,12 @@
             <label for="password">Senha:</label>
             <input type="password" id="password" name="senha" required>
 
-            <button type="submit">Entrar</button>
+            <button type="submit" class="btn btn-primary">Entrar</button>
         </form>
 
         <div class="link-alternativo">
+             Esqueceu sua senha? <a href="/fanbeads/forgot-password">Esqueci minha senha</a>
+             <br>
             Não tem conta? <a href="/fanbeads/register">Cadastre-se</a>
         </div>
     </main>

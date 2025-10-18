@@ -22,7 +22,11 @@
                         <a href="/fanbeads/detalhes?id=<?= $p->getId() ?>">
                             <img src="/fanbeads/assets/img/<?= htmlspecialchars($p->getImagem()) ?>" alt="<?= htmlspecialchars($p->getNome()) ?>">
                         </a>
-                        <h3><?= htmlspecialchars($p->getNome()) ?></h3>
+                        <h3>
+                            <a href="/fanbeads/detalhes?id=<?= $p->getId() ?>">
+                                <?= htmlspecialchars($p->getNome()) ?>
+                            </a>
+                        </h3>
                         <p>R$ <?= number_format($p->getPreco(), 2, ',', '.') ?></p>
 
                         <?php // Formulário de exclusão para administradores ?>

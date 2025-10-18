@@ -9,6 +9,7 @@
   /* Paleta de Cores */
   --color-primary: #63acff;
   --color-primary-dark: #5a9be0;
+  --color-blue-darker:#4e17a5;
   --color-secondary: #AD00F9;
   --color-success: #28a745;
   --color-success-dark: #218838;
@@ -95,6 +96,16 @@ nav.main-menu a {
 nav.main-menu a:hover {
   text-decoration: underline;
 }
+/* Remove estilos padrão do link no logo/título */
+header .brand a {
+  color: inherit; /* Faz o link herdar a cor do h1 (branco/roxo) */
+  text-decoration: none; /* Remove o sublinhado */
+}
+
+/* Opcional: Efeito ao passar o mouse */
+header .brand a:hover h1 {
+  opacity: 0.9; /* Leve transparência ao passar o mouse */
+}
 
 /* ==========================================================================
    3. COMPONENTES REUTILIZÁVEIS
@@ -138,6 +149,16 @@ nav.main-menu a:hover {
   padding: 0.25rem 0.5rem;
   border-radius: 0.5rem;
   font-weight: bold;
+}
+
+.card h3 a {
+  color: inherit; /* Faz o link herdar a cor do h3 (preto) */
+  text-decoration: none; /* Remove o sublinhado */
+}
+
+.card h3 a:hover {
+  text-decoration: underline; /* Adiciona sublinhado apenas ao passar o mouse */
+  color: var(--color-blue-darker); /* Muda a cor ao passar o mouse (opcional) */
 }
 
 /* --- Sistema de Botões --- */
@@ -237,10 +258,7 @@ section h2 {
 }
 
 /* --- Página Inicial (Novidades) --- */
-.novidades .cards {
-  max-width: calc( (var(--card-width) * 3) + (var(--gap) * 2) );
-  margin: 0 auto;
-}
+
 
 .novidades h2 {
   margin-top: 0.5rem;
@@ -325,7 +343,7 @@ section h2 {
 
 .form-page label {
   display: block;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
   font-weight: 600;
   color: var(--color-text-muted);
 }
@@ -339,9 +357,8 @@ section h2 {
   border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 1rem;
-  margin-top: 0.5rem;
 }
-
+/* Garante que o botão de submit ocupe 100% da largura no formulário */
 .form-page button[type="submit"] {
   width: 100%;
   margin-top: 1.5rem;
