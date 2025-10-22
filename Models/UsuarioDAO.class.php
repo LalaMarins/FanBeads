@@ -33,4 +33,19 @@ class UsuarioDAO
         $stmt->bindValue(':r', $u->getRole());
         $stmt->execute();
     }
+    /**
+ * Busca um usuário pelo seu endereço de e-mail.
+ * @return Usuario|null
+ */
+public function findByEmail(string $email): ?Usuario
+{
+    $sql = "SELECT * FROM usuario WHERE email = :email LIMIT 1";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindValue(':email', $email);
+    $stmt->execute();
+    $stmt->setFetchMode(PDO::FETCH_CLASS, Usuario::class);
+    
+    $result = $stmt->fetch();
+    return $result ?: null;
+}
 }

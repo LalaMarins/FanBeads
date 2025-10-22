@@ -1,4 +1,6 @@
 <?php
+// Inclui o autoloader do Composer (bibliotecas externas como PHPMailer)
+require __DIR__ . '/vendor/autoload.php';
 // --- Autoloader de Classes ---
 // Esta função é chamada automaticamente pelo PHP sempre que uma classe
 // que ainda não foi carregada é instanciada. Isso elimina a necessidade

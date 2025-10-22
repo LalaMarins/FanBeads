@@ -1,4 +1,7 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 class AuthController
 {
     private UsuarioDAO $usuarioDAO;
@@ -112,5 +115,80 @@ public function forgotPasswordForm(): void
 {
     // Simplesmente carrega a view que criaremos a seguir.
     require 'Views/forgot_password.php';
+}
+// Dentro da classe AuthController
+
+public function forgotPasswordSubmit(): void
+{
+    $email = trim($_POST['email'] ?? '');
+
+    // Habilita o debug ANTES de qualquer validação para garantir que vemos algo
+    $mail = new PHPMailer(true); 
+    $mail->SMTPDebug = SMTP::DEBUG_SERVER; // GARANTA QUE ESTÁ DESCOMENTADO
+    echo "DEBUG: Modo de debug do PHPMailer ATIVADO.<br><hr>"; // Output inicial para teste
+
+    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        // Se email inválido, mostra erro e para
+        echo "ERRO: Email inválido fornecido: " . htmlspecialchars($email);
+        exit; 
+        // header('Location: /fanbeads/forgot-password?error=email_invalido');
+        // exit;
+    }
+
+    $user = $this->usuarioDAO->findByEmail($email);
+
+    if ($user) {
+        echo "DEBUG: Usuário encontrado para o email: " . htmlspecialchars($email) . "<br><hr>";
+        
+        $token = bin2hex(random_bytes(32)); 
+        $resetLink = "http://localhost/fanbeads/reset-password?token=" . $token;
+
+        try {
+            echo "DEBUG: Configurando PHPMailer...<br>";
+            // Configurações do Servidor
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.gmail.com';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'almarins34@gmail.com'; 
+            $mail->Password   = 'iyrnvtrtdqmvgdtb'; 
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Use STARTTLS
+$mail->Port       = 587; // Mude a porta para 587
+            $mail->CharSet    = 'UTF-8';
+
+            // Remetente e Destinatário
+            $mail->setFrom('fanbeads25@gmail.com', 'FanBeads Loja');
+            $mail->addAddress($user->getEmail(), $user->getUsername());
+
+            // Conteúdo
+            $mail->isHTML(true);
+            $mail->Subject = 'Recuperação de Senha - FanBeads';
+            $mail->Body    = "Olá " . htmlspecialchars($user->getUsername()) . ",<br><br>Link de reset: <a href='" . $resetLink . "'>" . $resetLink . "</a><br><br>Equipe FanBeads";
+            $mail->AltBody = "Olá " . htmlspecialchars($user->getUsername()) . ",\n\nLink de reset: " . $resetLink . "\n\nEquipe FanBeads";
+
+            echo "DEBUG: Tentando enviar o email... (Debug do SMTP deve aparecer abaixo)<br><hr>";
+            
+            $mail->send(); // Tenta enviar
+            
+            // Se chegou aqui, o send() não lançou exceção
+            echo "<hr>DEBUG: PHPMailer->send() EXECUTADO SEM EXCEÇÃO. Verifique sua caixa de entrada e o log de debug acima.";
+            exit; // PARA A EXECUÇÃO AQUI para vermos o log
+
+        } catch (Exception $e) {
+            // Se o send() lançou uma exceção, paramos aqui e mostramos o erro
+            echo "<hr>ERRO CAPTURADO PELO CATCH: {$mail->ErrorInfo}<br>Mensagem da Exceção: {$e->getMessage()}";
+            error_log("Erro ao enviar email de reset: {$mail->ErrorInfo}");
+            exit; // PARA A EXECUÇÃO AQUI
+        }
+
+    } else {
+        // Email não encontrado
+        echo "DEBUG: Email não encontrado no banco: " . htmlspecialchars($email);
+        // header('Location: /fanbeads/forgot-password?success=instrucoes_enviadas'); // Redirecionamento original comentado
+        exit; // PARA A EXECUÇÃO AQUI
+    }
+
+    // O redirecionamento original foi comentado/removido para este teste
+    // header('Location: /fanbeads/forgot-password?success=instrucoes_enviadas');
+    // exit;
 }
 }

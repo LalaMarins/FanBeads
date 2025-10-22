@@ -54,6 +54,7 @@ $router->post('/register', [AuthController::class, 'register']);
 $router->get('/logout', [AuthController::class, 'logout']);
 
 $router->get('/forgot-password', [AuthController::class, 'forgotPasswordForm']);
+$router->post('/forgot-password', [AuthController::class, 'forgotPasswordSubmit']);
 
 // --- Carrinho ---
 $router->get('/carrinho', [CarrinhoController::class, 'index']);
