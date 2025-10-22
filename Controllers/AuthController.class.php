@@ -119,40 +119,58 @@ public function forgotPasswordForm(): void
 // Dentro da classe AuthController
 
 public function forgotPasswordSubmit(): void
-{
-    $email = trim($_POST['email'] ?? '');
+    {
+        $email = trim($_POST['email'] ?? '');
 
-    // Habilita o debug ANTES de qualquer validação para garantir que vemos algo
-    $mail = new PHPMailer(true); 
-    $mail->SMTPDebug = SMTP::DEBUG_SERVER; // GARANTA QUE ESTÁ DESCOMENTADO
-    echo "DEBUG: Modo de debug do PHPMailer ATIVADO.<br><hr>"; // Output inicial para teste
+        if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            // Se o email for inválido, redireciona de volta.
+            header('Location: /fanbeads/forgot-password?error=email_invalido');
+            exit;
+        }
 
-    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        // Se email inválido, mostra erro e para
-        echo "ERRO: Email inválido fornecido: " . htmlspecialchars($email);
-        exit; 
-        // header('Location: /fanbeads/forgot-password?error=email_invalido');
-        // exit;
-    }
+        $user = $this->usuarioDAO->findByEmail($email);
 
-    $user = $this->usuarioDAO->findByEmail($email);
+        // Se o e-mail NÃO for encontrado, redireciona para uma página de erro.
+        if (!$user) {
+            header('Location: /fanbeads/forgot-password?error=email_nao_encontrado');
+            exit;
+        }
 
-    if ($user) {
-        echo "DEBUG: Usuário encontrado para o email: " . htmlspecialchars($email) . "<br><hr>";
+
+        // --- GERAÇÃO DO TOKEN E EXPIRAÇÃO ---
+        $token = bin2hex(random_bytes(32));
         
-        $token = bin2hex(random_bytes(32)); 
+        // Define a expiração para 1 hora a partir de agora
+        $expiresAt = (new DateTime())
+            ->add(new DateInterval('PT1H')) // PT1H = Período de Tempo de 1 Hora
+            ->format('Y-m-d H:i:s');
+
+        // --- SALVA O TOKEN NO BANCO ---
+        try {
+            $this->usuarioDAO->saveResetToken($user->getEmail(), $token, $expiresAt);
+        } catch (Exception $e) {
+            // Se falhar ao salvar no banco, não podemos continuar.
+            error_log('Falha ao salvar token de reset: ' . $e->getMessage());
+            header('Location: /fanbeads/forgot-password?error=db_error');
+            exit;
+        }
+        
+        // --- MONTAGEM DO LINK DE REDEFINIÇÃO ---
+        // (Certifique-se que seu XAMPP está rodando em localhost)
         $resetLink = "http://localhost/fanbeads/reset-password?token=" . $token;
 
+        // --- ENVIO DO EMAIL (SEM DEBUG) ---
+        $mail = new PHPMailer(true);
+
         try {
-            echo "DEBUG: Configurando PHPMailer...<br>";
             // Configurações do Servidor
             $mail->isSMTP();
             $mail->Host       = 'smtp.gmail.com';
             $mail->SMTPAuth   = true;
-            $mail->Username   = 'almarins34@gmail.com'; 
-            $mail->Password   = 'iyrnvtrtdqmvgdtb'; 
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Use STARTTLS
-$mail->Port       = 587; // Mude a porta para 587
+            $mail->Username   = 'almarins34@gmail.com'; // SEU EMAIL GMAIL
+            $mail->Password   = 'iyrnvtrtdqmvgdtb'; // SUA SENHA DE APP
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port       = 587;
             $mail->CharSet    = 'UTF-8';
 
             // Remetente e Destinatário
@@ -162,33 +180,103 @@ $mail->Port       = 587; // Mude a porta para 587
             // Conteúdo
             $mail->isHTML(true);
             $mail->Subject = 'Recuperação de Senha - FanBeads';
-            $mail->Body    = "Olá " . htmlspecialchars($user->getUsername()) . ",<br><br>Link de reset: <a href='" . $resetLink . "'>" . $resetLink . "</a><br><br>Equipe FanBeads";
-            $mail->AltBody = "Olá " . htmlspecialchars($user->getUsername()) . ",\n\nLink de reset: " . $resetLink . "\n\nEquipe FanBeads";
-
-            echo "DEBUG: Tentando enviar o email... (Debug do SMTP deve aparecer abaixo)<br><hr>";
+            $mail->Body    = "Olá " . htmlspecialchars($user->getUsername()) . ",<br><br>Recebemos uma solicitação para redefinir sua senha. Clique no link abaixo para criar uma nova senha:<br><br><a href='" . $resetLink . "'>" . $resetLink . "</a><br><br>Se você não solicitou isso, pode ignorar este e-mail.<br>Este link expira em 1 hora.<br><br>Equipe FanBeads";
+            $mail->AltBody = "Olá " . htmlspecialchars($user->getUsername()) . ",\n\nLink para redefinir sua senha (expira em 1 hora): " . $resetLink . "\n\nEquipe FanBeads";
             
-            $mail->send(); // Tenta enviar
-            
-            // Se chegou aqui, o send() não lançou exceção
-            echo "<hr>DEBUG: PHPMailer->send() EXECUTADO SEM EXCEÇÃO. Verifique sua caixa de entrada e o log de debug acima.";
-            exit; // PARA A EXECUÇÃO AQUI para vermos o log
+            $mail->send();
 
         } catch (Exception $e) {
-            // Se o send() lançou uma exceção, paramos aqui e mostramos o erro
-            echo "<hr>ERRO CAPTURADO PELO CATCH: {$mail->ErrorInfo}<br>Mensagem da Exceção: {$e->getMessage()}";
-            error_log("Erro ao enviar email de reset: {$mail->ErrorInfo}");
-            exit; // PARA A EXECUÇÃO AQUI
+            // Se o envio do email falhar, registra o erro mas NÃO informa o usuário.
+            error_log("Erro no PHPMailer ao enviar reset: {$mail->ErrorInfo}");
         }
 
-    } else {
-        // Email não encontrado
-        echo "DEBUG: Email não encontrado no banco: " . htmlspecialchars($email);
-        // header('Location: /fanbeads/forgot-password?success=instrucoes_enviadas'); // Redirecionamento original comentado
-        exit; // PARA A EXECUÇÃO AQUI
+        // Redireciona para a página de sucesso
+        // (Isso agora só acontece se o $user foi encontrado)
+        header('Location: /fanbeads/forgot-password?success=instrucoes_enviadas');
+        exit;
+    }
+    /**
+     * (GET) Exibe o formulário de redefinição de senha.
+     * Valida o token recebido pela URL.
+     */
+    public function resetPasswordForm(): void
+    {
+        $token = trim($_GET['token'] ?? '');
+
+        if (empty($token)) {
+            // Se não veio token, exibe o erro na view
+            $error = "Token inválido ou não fornecido.";
+            require 'Views/reset_password.php';
+            exit;
+        }
+
+        // Busca o token no banco (usando o método que criamos no DAO)
+        $tokenData = $this->usuarioDAO->findUserByValidToken($token);
+
+        if (!$tokenData) {
+            // Se o token não existe ou expirou, exibe o erro
+            $error = "Link inválido ou expirado. Por favor, solicite um novo.";
+            require 'Views/reset_password.php';
+            exit;
+        }
+
+        // Se o token for válido, apenas carrega a view.
+        // A própria view (reset_password.php) usará a variável $token.
+        require 'Views/reset_password.php';
     }
 
-    // O redirecionamento original foi comentado/removido para este teste
-    // header('Location: /fanbeads/forgot-password?success=instrucoes_enviadas');
-    // exit;
-}
+    /**
+     * (POST) Processa o formulário de redefinição de senha.
+     * Valida as senhas, atualiza o usuário e apaga o token.
+     */
+    public function resetPasswordSubmit(): void
+    {
+        $token = trim($_POST['token'] ?? '');
+        $senha = $_POST['senha'] ?? '';
+        $senhaConfirm = $_POST['senha_confirm'] ?? '';
+
+        // 1. Validação do Token (redundante, mas seguro)
+        $tokenData = $this->usuarioDAO->findUserByValidToken($token);
+        if (!$tokenData) {
+            $error = "Link inválido ou expirado. Por favor, solicite um novo.";
+            require 'Views/reset_password.php';
+            exit;
+        }
+
+        // 2. Validação das Senhas
+        if (empty($senha) || strlen($senha) < 6) {
+            $error = "A senha deve ter pelo menos 6 caracteres.";
+            require 'Views/reset_password.php'; // Passa o $token de volta para a view
+            exit;
+        }
+        if ($senha !== $senhaConfirm) {
+            $error = "As senhas não coincidem.";
+            require 'Views/reset_password.php'; // Passa o $token de volta para a view
+            exit;
+        }
+
+        // 3. Atualização do Usuário
+        try {
+            // Pega o email que estava associado ao token
+            $email = $tokenData['email'];
+            
+            // Cria o hash da nova senha
+            $newHash = password_hash($senha, PASSWORD_DEFAULT);
+            
+            // Atualiza a senha no banco
+            $this->usuarioDAO->updatePassword($email, $newHash);
+            
+            // Apaga o token para que não possa ser usado novamente
+            $this->usuarioDAO->deleteResetToken($email);
+
+            // 4. Exibe mensagem de sucesso
+            $success = "Sua senha foi redefinida com sucesso!";
+            require 'Views/reset_password.php';
+
+        } catch (Exception $e) {
+            error_log("Erro ao redefinir senha: " . $e->getMessage());
+            $error = "Ocorreu um erro interno. Tente novamente.";
+            require 'Views/reset_password.php'; // Passa o $token de volta para a view
+        }
+    }
 }

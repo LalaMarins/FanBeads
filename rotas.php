@@ -53,8 +53,11 @@ $router->get('/register', [AuthController::class, 'registerForm']);
 $router->post('/register', [AuthController::class, 'register']);
 $router->get('/logout', [AuthController::class, 'logout']);
 
+
 $router->get('/forgot-password', [AuthController::class, 'forgotPasswordForm']);
 $router->post('/forgot-password', [AuthController::class, 'forgotPasswordSubmit']);
+$router->get('/reset-password', [AuthController::class, 'resetPasswordForm']);
+$router->post('/reset-password', [AuthController::class, 'resetPasswordSubmit']);
 
 // --- Carrinho ---
 $router->get('/carrinho', [CarrinhoController::class, 'index']);
@@ -66,3 +69,4 @@ $router->post('/carrinho/remover', [CarrinhoController::class, 'remover']);
 $router->get('/meus-pedidos', [PedidoController::class, 'historico']);
 $router->post('/pedido/finalizar', [PedidoController::class, 'finalizar']); 
 $router->get('/pedido/sucesso', [PedidoController::class, 'sucesso']);    
+$router->get('/pedido/pagamento-sucesso', [PedidoController::class, 'pagamentoSucesso']);
