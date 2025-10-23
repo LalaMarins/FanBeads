@@ -1,15 +1,10 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FanBeads – Login</title>
-    <link rel="stylesheet" href="/fanbeads/assets/css/style.css">
-           <script src="/fanbeads/assets/js/script.js"></script>
-</head>
-<body>
-    <?php require 'Views/menu.php'; ?>
+<?php 
+// Define o título da página
+$pageTitle = 'FanBeads – Login'; 
 
+//Inclui o cabeçalho
+require 'Views/_header.php'; 
+?>
     <main class="form-page">
         <h2>Login</h2>
 
@@ -39,5 +34,7 @@
             Não tem conta? <a href="/fanbeads/register">Cadastre-se</a>
         </div>
     </main>
-</body>
-</html>
+    <?php 
+//Inclui o rodapé
+require 'Views/_footer.php'; 
+?>

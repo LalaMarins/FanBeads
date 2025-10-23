@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FanBeads – Recuperar Senha</title>
-    <link rel="stylesheet" href="/fanbeads/assets/css/style.css">
-</head>
-<body>
-    <?php require 'Views/menu.php'; ?>
+<?php 
+// Define o título da página
+$pageTitle = 'FanBeads – Recuperar Senha'; 
 
+//Inclui o cabeçalho
+require 'Views/_header.php'; 
+?>
     <main class="form-page">
         <h2>Recuperar Senha</h2>
         <p>Digite seu e-mail abaixo. Se ele estiver cadastrado, enviaremos instruções para redefinir sua senha.</p>
@@ -40,5 +36,7 @@
             Lembrou a senha? <a href="/fanbeads/login">Faça login</a>
         </div>
     </main>
-</body>
-</html>
+    <?php 
+//Inclui o rodapé
+require 'Views/_footer.php'; 
+?>

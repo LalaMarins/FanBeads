@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FanBeads – Início</title>
-    <link rel="stylesheet" href="/fanbeads/assets/css/style.css">
-</head>
-<body>
-    <?php require 'Views/menu.php'; ?>
+<?php 
+// Define o título da página
+$pageTitle = 'FanBeads – Início'; 
 
+//Inclui o cabeçalho
+require 'Views/_header.php'; 
+?>
     <main>
         <section class="novidades">
             <h2>Novidades</h2>
@@ -29,5 +25,7 @@
             </div>
         </section>
     </main>
-</body>
-</html>
+    <?php 
+//Inclui o rodapé
+require 'Views/_footer.php'; 
+?>

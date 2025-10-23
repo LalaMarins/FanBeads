@@ -1,15 +1,10 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FanBeads – <?= htmlspecialchars($produto->getNome() ?? 'Detalhes') ?></title>
-    <link rel="stylesheet" href="/fanbeads/assets/css/style.css">
-           <script src="/fanbeads/assets/js/script.js"></script>
-</head>
-<body>
-    <?php require 'Views/menu.php'; ?>
+<?php 
+// Define o título da página
+$pageTitle = 'FanBeads – ' . htmlspecialchars($produto->getNome() ?? 'Detalhes');
 
+//Inclui o cabeçalho
+require 'Views/_header.php'; 
+?>
     <main class="details-page">
         <?php if (empty($produto)): ?>
             <p>Produto não encontrado.</p>
@@ -64,6 +59,7 @@
             </div>
         <?php endif; ?>
     </main>
-
-</body>
-</html>
+    <?php 
+//Inclui o rodapé
+require 'Views/_footer.php'; 
+?>
