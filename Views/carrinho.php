@@ -54,9 +54,46 @@ require 'Views/_header.php';
                     <strong>Total:</strong>
                     <span>R$ <?= number_format($total, 2, ',', '.') ?></span>
                 </div>
-                <form action="/fanbeads/pedido/finalizar" method="POST">
-                    <button type="submit" class="btn btn-success">Finalizar Pedido</button>
-                </form>
+                <div id="wallet_container"></div>
+
+        </div> <script>
+        // Garante que o script só rode depois que a página carregar
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Pega as variáveis do PHP que o Controller enviou
+            const publicKey = "APP_USR-0312d128-8f42-4f2c-bd30-d8505f4aa75a";
+            const preferenceId = "<?= $preferenceId ?? '' ?>";
+
+            if (publicKey && preferenceId) {
+                // Inicializa o SDK do Mercado Pago
+                const mp = new MercadoPago(publicKey, {
+                    locale: 'pt-BR' // Deixa o pop-up em português
+                });
+
+                // Cria o botão de pagamento (Wallet Brick)
+                const bricksBuilder = mp.bricks();
+
+                bricksBuilder.create("wallet", "wallet_container", {
+                    initialization: {
+                        preferenceId: preferenceId,
+                        redirectMode: 'self' // Abre na mesma aba (pop-up)
+                    },
+                    customization: {
+                        texts: {
+                            valueProp: 'security_details', // Muda o texto (opcional)
+                            action: 'pay' // Texto do botão
+                        },
+                    }
+                })
+                .catch((error) => console.error('Erro ao renderizar Wallet Brick:', error));
+
+            } else {
+                console.log("MP: Chave pública ou ID de preferência não encontrado.");
+            }
+        });
+        </script>
+
+
             </div>
         <?php endif; ?>
     </main>

@@ -15,6 +15,8 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     <link rel="stylesheet" href="/fanbeads/assets/css/style.css">
     <link rel="icon" type="image/png" sizes="32x32" href="/fanbeads/assets/img/happy-face.png">
     <script src="/fanbeads/assets/js/script.js" defer></script>
+    
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
 
 </head>
 <body>

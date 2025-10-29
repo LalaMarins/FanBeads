@@ -1,7 +1,8 @@
 <?php
-use MercadoPago\SDK;
-use MercadoPago\Preference;
-use MercadoPago\Item;
+use MercadoPago\MercadoPagoConfig;
+use MercadoPago\Client\Preference\PreferenceClient;
+use MercadoPago\Exceptions\MPApiException;
+
 /**
  * Gerencia a finalização de pedidos e o histórico de compras do usuário.
  */
@@ -21,69 +22,92 @@ class PedidoController
      * Processa os dados do carrinho (POST) para criar e salvar um novo pedido.
      * Após salvar, redireciona para a página de sucesso para evitar reenvio do formulário.
      */
+   /**
+     * Processa os dados do carrinho (POST) para criar uma preferência
+     * de pagamento no Mercado Pago (usando SDK v3) e redirecionar o usuário.
+     */
     public function finalizar(): void
-{
-    // --- VALIDAÇÕES ---
-    if (!isset($_SESSION['user'])) {
-        header('Location: /fanbeads/login');
-        exit;
+    {
+        // --- VALIDAÇÕES (continua igual) ---
+        if (!isset($_SESSION['user'])) {
+            header('Location: /fanbeads/login');
+            exit;
+        }
+        if (empty($_SESSION['cart'])) {
+            header('Location: /fanbeads/carrinho');
+            exit;
+        }
+
+        // --- CONFIGURA O MERCADO PAGO (SINTAXE V3) ---
+        // 1. Cole seu Access Token (o da imagem) aqui
+        $seuAccessToken = "APP_USR-8360318833146032-102219-9a1f1cf0e549879f8beab07e92267306-2941917038"; 
+        
+        try {
+            // Inicializa o SDK V3
+            MercadoPagoConfig::setAccessToken($seuAccessToken);
+        } catch (Exception $e) {
+            // Erro se o SDK falhar ao ser configurado
+            error_log('Erro ao configurar Access Token MP: ' . $e->getMessage());
+            header('Location: /fanbeads/carrinho?error=falha_gateway_config');
+            exit;
+        }
+
+        // --- MONTAGEM DOS ITENS PARA A API ---
+        $carrinho = $_SESSION['cart'];
+        $itensParaAPI = [];
+        $totalPedido = 0;
+
+        foreach ($carrinho as $itemArray) {
+            // Na V3, os itens são um array associativo
+            $itensParaAPI[] = [
+                'title' => $itemArray['nome'] . " (" . $itemArray['cor'] . " / " . $itemArray['tamanho'] . ")",
+                'quantity' => (int)$itemArray['quantidade'],
+                'unit_price' => (float)$itemArray['preco'],
+                'currency_id' => "BRL"
+            ];
+            $totalPedido += $itemArray['preco'] * $itemArray['quantidade'];
+        }
+
+        // --- CRIA A PREFERÊNCIA DE PAGAMENTO (SINTAXE V3) ---
+        try {
+            // 2. Cria o "Client" de Preferência
+            $client = new PreferenceClient();
+            
+            // 3. Cria a preferência passando um array de configuração
+            $preference = $client->create([
+                "items" => $itensParaAPI,
+                "back_urls" => [
+                    "success" => "http://localhost/fanbeads/pedido/pagamento-sucesso",
+                    "failure" => "http://localhost/fanbeads/carrinho?pagamento=falha",
+                    "pending" => "http://localhost/fanbeads/carrinho?pagamento=pendente"
+                ],
+
+            ]);
+
+            // --- REDIRECIONA O USUÁRIO ---
+            // 4. Redireciona o usuário para a URL de pagamento
+            // (O $preference->init_point existe no objeto de resposta)
+            header('Location: ' . $preference->init_point);
+            exit;
+
+        } catch (MPApiException $e) {
+            // Erro específico da API do MP (ex: token errado, dados inválidos)
+            // Agora vamos ver o erro em vez da tela branca!
+            echo "Erro da API do Mercado Pago: " . $e->getMessage() . "<br>";
+            echo "<pre>";
+            print_r($e->getApiResponse());
+            echo "</pre>";
+            error_log('Erro da API Mercado Pago: ' . $e->getMessage());
+            // header('Location: /fanbeads/carrinho?error=falha_gateway_api');
+            exit;
+        } catch (Exception $e) {
+            // Outro erro (ex: falha de rede)
+            echo "Erro geral ao criar preferência: " . $e->getMessage();
+            error_log('Erro geral ao criar preferência MP: ' . $e->getMessage());
+            // header('Location: /fanbeads/carrinho?error=falha_gateway_geral');
+            exit;
+        }
     }
-    if (empty($_SESSION['cart'])) {
-        header('Location: /fanbeads/carrinho');
-        exit;
-    }
-
-    // --- CONFIGURA O MERCADO PAGO ---
-    // 1. Cole seu Access Token de TESTE aqui
-    $seuAccessToken = "APP_USR-8360318833146032-102219-9a1f1cf0e549879f8beab07e92267306-2941917038"; 
-    SDK::setAccessToken($seuAccessToken);
-
-    // --- MONTAGEM DOS ITENS PARA A API ---
-    $carrinho = $_SESSION['cart'];
-    $itensParaAPI = [];
-    $totalPedido = 0;
-
-    foreach ($carrinho as $itemArray) {
-        $item = new Item();
-        $item->title = $itemArray['nome'] . " (" . $itemArray['cor'] . " / " . $itemArray['tamanho'] . ")";
-        $item->quantity = $itemArray['quantidade'];
-        $item->unit_price = (float)$itemArray['preco']; // Preço deve ser float
-        $item->currency_id = "BRL"; // Moeda (Real Brasileiro)
-
-        $itensParaAPI[] = $item;
-        $totalPedido += $itemArray['preco'] * $itemArray['quantidade'];
-    }
-
-    // --- CRIA A PREFERÊNCIA DE PAGAMENTO ---
-    try {
-        $preference = new Preference();
-        $preference->items = $itensParaAPI;
-
-        // 3. Define as URLs de retorno (para onde o MP te envia após o pagamento)
-        // (Vamos criar essas rotas no próximo passo)
-        $preference->back_urls = [
-            "success" => "http://localhost/fanbeads/pedido/pagamento-sucesso",
-            "failure" => "http://localhost/fanbeads/carrinho?pagamento=falha",
-            "pending" => "http://localhost/fanbeads/carrinho?pagamento=pendente"
-        ];
-        $preference->auto_return = "approved"; // Retorna automaticamente se aprovado
-
-        // Salva a preferência (envia para a API do MP)
-        $preference->save();
-
-        // --- REDIRECIONA O USUÁRIO ---
-        // 4. Redireciona o usuário para a URL de pagamento (init_point)
-        // (Em modo Sandbox, ele vai para uma página de pagamento de teste)
-        header('Location: ' . $preference->init_point);
-        exit;
-
-    } catch (Exception $e) {
-        // Se der erro ao criar a preferência, volta ao carrinho
-        error_log('Erro ao criar preferência do Mercado Pago: ' . $e->getMessage());
-        header('Location: /fanbeads/carrinho?error=falha_gateway');
-        exit;
-    }
-}
     /**
      * Exibe a página de confirmação de pedido bem-sucedido (GET).
      */

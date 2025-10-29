@@ -1,4 +1,7 @@
 <?php
+use MercadoPago\MercadoPagoConfig;
+use MercadoPago\Client\Preference\PreferenceClient;
+use MercadoPago\Exceptions\MPApiException;
 class CarrinhoController
 {
     private ProdutoDAO $produtoDAO;
@@ -19,23 +22,61 @@ class CarrinhoController
      * Exibe a página do carrinho com os itens, subtotais e total.
      */
     public function index(): void
-    {
-        $itensCarrinho = $_SESSION['cart'];
-        $total = 0;
+{
+    $itensCarrinho = $_SESSION['cart'];
+    $total = 0;
+    $preferenceId = null; // Inicia como nulo
 
-        // Calcula o subtotal para cada item e o total do pedido.
-        // Adiciona um 'index' para facilitar a remoção/atualização via AJAX.
-        foreach ($itensCarrinho as $index => &$item) {
-            $item['subtotal'] = $item['quantidade'] * $item['preco'];
-            $item['index'] = $index;
-            $total += $item['subtotal'];
+    // 1. Calcula totais e índices (como antes)
+    foreach ($itensCarrinho as $index => &$item) {
+        $item['subtotal'] = $item['quantidade'] * $item['preco'];
+        $item['index'] = $index;
+        $total += $item['subtotal'];
+    }
+    unset($item);
+
+    // 2. Se o carrinho NÃO estiver vazio, cria a preferência de pagamento
+    if (!empty($itensCarrinho)) {
+        try {
+            // --- CONFIGURA O MERCADO PAGO (SINTAXE V3) ---
+            $seuAccessToken = "APP_USR-8360318833146032-102219-9a1f1cf0e549879f8beab07e92267306-2941917038"; 
+            MercadoPagoConfig::setAccessToken($seuAccessToken);
+
+            // --- MONTAGEM DOS ITENS PARA A API ---
+            $itensParaAPI = [];
+            foreach ($itensCarrinho as $itemArray) {
+                $itensParaAPI[] = [
+                    'title' => $itemArray['nome'] . " (" . $itemArray['cor'] . " / " . $itemArray['tamanho'] . ")",
+                    'quantity' => (int)$itemArray['quantidade'],
+                    'unit_price' => (float)$itemArray['preco'],
+                    'currency_id' => "BRL"
+                ];
+            }
+
+            // --- CRIA A PREFERÊNCIA DE PAGAMENTO (SINTAXE V3) ---
+            $client = new PreferenceClient();
+            $preference = $client->create([
+                "items" => $itensParaAPI,
+                "back_urls" => [
+                    "success" => "http://localhost/fanbeads/pedido/pagamento-sucesso",
+                    "failure" => "http://localhost/fanbeads/carrinho?pagamento=falha",
+                    "pending" => "http://localhost/fanbeads/carrinho?pagamento=pendente"
+                ],
+                // A linha "auto_return" foi removida, como fizemos antes
+            ]);
+
+            // 3. SALVA O ID DA PREFERÊNCIA PARA A VIEW
+            $preferenceId = $preference->id;
+
+        } catch (Exception $e) {
+            // Se falhar (ex: token errado), apenas não mostrará o botão
+            error_log('Erro ao criar preferência MP no carrinho: ' . $e->getMessage());
         }
-        unset($item); // Boa prática: remove a referência do loop.
-
-        // Passa as variáveis para a view.
-        require 'Views/carrinho.php';
     }
 
+    // 4. Carrega a view (passando as variáveis de antes + $preferenceId)
+    require 'Views/carrinho.php';
+}
     /**
      * Adiciona um produto ao carrinho ou incrementa sua quantidade se já existir.
      */
