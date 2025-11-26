@@ -7,6 +7,15 @@ require 'Views/_header.php';
 ?>
     <main class="form-page">
         <h2>Cadastre-se</h2>
+        <?php if (isset($_GET['error'])): ?>
+            <?php if ($_GET['error'] === 'email_existente'): ?>
+                <p class="error-message">Este e-mail já está cadastrado.</p>
+            <?php elseif ($_GET['error'] === 'usuario_existente'): ?>
+                <p class="error-message">Este nome de usuário já está em uso.</p>
+            <?php elseif ($_GET['error'] === 'campos_vazios'): ?>
+                <p class="error-message">Por favor, preencha todos os campos.</p>
+            <?php endif; ?>
+        <?php endif; ?>
         <form action="/fanbeads/register" method="POST">
             <label for="username">Usuário:</label>
             <input type="text" id="username" name="username" required>

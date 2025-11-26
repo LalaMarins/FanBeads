@@ -20,6 +20,14 @@ require 'Views/_header.php';
                             </a>
                         </h3>
                         <p>R$ <?= number_format($p->getPreco(), 2, ',', '.') ?></p>
+
+                        <?php // CÓDIGO NOVO: Botão de exclusão para administradores na Home ?>
+                        <?php if (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin'): ?>
+                            <form action="/fanbeads/produtos/excluir" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este produto?');" style="margin-top: 10px;">
+                                <input type="hidden" name="id" value="<?= $p->getId() ?>">
+                                <button type="submit" class="btn btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.9rem;">Excluir</button>
+                            </form>
+                        <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
             </div>

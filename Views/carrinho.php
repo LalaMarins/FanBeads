@@ -50,6 +50,9 @@ require 'Views/_header.php';
             </form>
 
             <div class="cart-actions">
+                <div style="margin-bottom: 1rem; text-align: left;">
+                    <a href="/fanbeads/produtos" class="btn btn-secondary">← Continuar Comprando</a>
+                </div>
                 <div class="cart-total">
                     <strong>Total:</strong>
                     <span>R$ <?= number_format($total, 2, ',', '.') ?></span>
