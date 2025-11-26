@@ -27,31 +27,31 @@ class AuthController
     }
 
     /**
-     * Processa os dados enviados pelo formulário de login.
+     * Processa os dados enviados pelo formulário de login (AGORA POR EMAIL).
      */
     public function login(): void
     {
-        $username = trim($_POST['username'] ?? '');
+        $email = trim($_POST['email'] ?? ''); // Alterado de username para email
         $password = $_POST['senha'] ?? '';
 
-        // Busca o usuário no banco de dados.
-        $user = $this->usuarioDAO->findByUsername($username);
+        // Busca o usuário no banco de dados POR EMAIL
+        // (Já criamos o findByEmail no passo da recuperação de senha, então podemos usar aqui)
+        $user = $this->usuarioDAO->findByEmail($email);
 
         // Verifica se o usuário existe e se a senha está correta.
-        // Usa o getter getSenha() para acessar a propriedade privada (encapsulamento).
         if ($user && password_verify($password, $user->getSenha())) {
-            // Se as credenciais estiverem corretas, armazena os dados do usuário na sessão.
             $_SESSION['user'] = [
                 'id'       => $user->getId(),
                 'username' => $user->getUsername(),
+                'email'    => $user->getEmail(), // É bom guardar o email na sessão tb
                 'role'     => $user->getRole(),
             ];
             header('Location: /fanbeads/');
             exit;
         }
 
-        // Se o login falhar, exibe novamente o formulário com uma mensagem de erro.
-        $loginError = 'Usuário ou senha inválidos.';
+        // Se falhar
+        $loginError = 'E-mail ou senha inválidos.';
         require 'Views/login.php';
     }
 
@@ -66,7 +66,7 @@ class AuthController
 
     /**
      * Processa os dados enviados pelo formulário de cadastro.
-     * Renomeado de 'cadastrar' para 'register' para consistência.
+     * AGORA VERIFICA DUPLICIDADE.
      */
     public function register(): void
     {
@@ -74,31 +74,43 @@ class AuthController
         $email = trim($_POST['email'] ?? '');
         $password = $_POST['senha'] ?? '';
 
-        // Validação básica (em um projeto real, a validação seria mais complexa).
+        // 1. Validação básica
         if (empty($username) || empty($email) || empty($password)) {
-            // Lógica de erro: redirecionar de volta com uma mensagem.
             header('Location: /fanbeads/register?error=campos_vazios');
             exit;
         }
 
-        // Cria o hash da senha de forma segura.
+        // 2. VERIFICAÇÃO DE DUPLICIDADE (NOVO)
+        // Verifica se o e-mail já existe
+        if ($this->usuarioDAO->findByEmail($email)) {
+            header('Location: /fanbeads/register?error=email_existente');
+            exit;
+        }
+        // Verifica se o nome de usuário já existe
+        if ($this->usuarioDAO->findByUsername($username)) {
+            header('Location: /fanbeads/register?error=usuario_existente');
+            exit;
+        }
+
+        // Cria o hash da senha
         $hash = password_hash($password, PASSWORD_DEFAULT);
 
-        // Cria um novo objeto Usuario e popula com os setters (encapsulamento).
         $newUser = new Usuario();
         $newUser->setUsername($username);
         $newUser->setEmail($email);
         $newUser->setSenha($hash);
-        $newUser->setRole('user'); // Define o papel padrão para novos usuários.
+        $newUser->setRole('user');
 
-        // Insere o novo usuário no banco de dados.
-        $this->usuarioDAO->insert($newUser);
-
-        // Redireciona para a página de login para que o novo usuário possa entrar.
-        header('Location: /fanbeads/login?success=cadastro_ok');
-        exit;
+        try {
+            $this->usuarioDAO->insert($newUser);
+            header('Location: /fanbeads/login?success=cadastro_ok');
+            exit;
+        } catch (Exception $e) {
+            // Caso ocorra algum outro erro de banco não previsto
+            header('Location: /fanbeads/register?error=erro_banco');
+            exit;
+        }
     }
-
     /**
      * Encerra a sessão do usuário (faz o logout).
      */
@@ -116,7 +128,7 @@ public function forgotPasswordForm(): void
     // Simplesmente carrega a view que criaremos a seguir.
     require 'Views/forgot_password.php';
 }
-// Dentro da classe AuthController
+
 
 public function forgotPasswordSubmit(): void
     {
