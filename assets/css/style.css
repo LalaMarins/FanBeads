@@ -659,3 +659,43 @@ section h2 {
 .history-item .item-price {
   font-weight: 600;
 }
+/* ==========================================================================
+   7. MELHORIAS DE LAYOUT (CORREÇÕES FINAIS)
+   ========================================================================== */
+
+/* --- Corrige o botão "Excluir" grudado no preço --- */
+/* Aplica margem no formulário que envolve o botão dentro do card */
+.card form {
+    margin-top: 1rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(0,0,0,0.05); /* Opcional: uma linha sutil */
+}
+
+/* --- Corrige Checkboxes desalinhados no Cadastro de Produto --- */
+/* O container dos checkboxes agora usa Grid para alinhar tudo bonitinho */
+.checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Colunas automáticas */
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* O label (texto + caixinha) vira Flexbox para alinhar verticalmente */
+.checkbox-label {
+    display: flex !important; /* Força o display flex */
+    align-items: center;      /* Centraliza verticalmente */
+    margin-bottom: 0;         /* Remove margem extra */
+    cursor: pointer;
+    font-weight: normal;      /* Tira o negrito excessivo se houver */
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: auto;              /* Reseta largura de 100% que inputs normais têm */
+    margin-right: 8px;        /* Espaço entre a caixinha e o texto */
+    margin-bottom: 0;         /* Remove margem inferior do input */
+}
+
+/* Pequeno ajuste no botão de upload de arquivo para não quebrar layout */
+input[type="file"] {
+    padding: 0.5rem 0;
+}

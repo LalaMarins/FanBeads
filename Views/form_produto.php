@@ -30,6 +30,7 @@ require 'Views/_header.php';
 
             <label for="imagem">Imagem:</label>
             <input type="file" id="imagem" name="imagem" accept="image/*" required>
+            <img id="imagem-preview" src="#" alt="Prévia da imagem" style="display:none; margin-top: 10px; max-width: 100%; height: auto; border-radius: 8px; border: 1px solid #ddd;">
 
             <fieldset>
                 <legend>Cores Disponíveis</legend>

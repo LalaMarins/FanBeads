@@ -6,15 +6,11 @@
  */
 document.addEventListener('DOMContentLoaded', () => {
 
-    /**
-     * INICIALIZADOR PARA O FORMULÁRIO DE PRODUTO (form_produto.php)
-     * Ativa o botão para adicionar múltiplos campos de cor personalizada.
-     */
     const initAdminProductForm = () => {
+        // 1. Lógica para adicionar cores extras (código antigo)
         const addColorBtn = document.getElementById('add-cor-btn');
         const colorsContainer = document.getElementById('novas-cores-container');
 
-        // Só executa se os elementos existirem nesta página.
         if (addColorBtn && colorsContainer) {
             addColorBtn.addEventListener('click', () => {
                 const newLabel = document.createElement('label');
@@ -25,6 +21,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 newLabel.appendChild(newInput);
                 colorsContainer.appendChild(newLabel);
+            });
+        }
+
+        // 2. Lógica para PREVIEW DA IMAGEM (Código NOVO)
+        const inputImagem = document.getElementById('imagem');
+        const imgPreview = document.getElementById('imagem-preview');
+
+        if (inputImagem && imgPreview) {
+            inputImagem.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    // Quando o arquivo terminar de ser lido, mostra na tela
+                    reader.onload = function(e) {
+                        imgPreview.src = e.target.result;
+                        imgPreview.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    imgPreview.style.display = 'none';
+                }
             });
         }
     };
