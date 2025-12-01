@@ -46,6 +46,9 @@ $router->get('/produtos/novo', [ProdutoController::class, 'novo']);
 $router->post('/produtos/criar', [ProdutoController::class, 'criar']);   
 $router->post('/produtos/excluir', [ProdutoController::class, 'excluir']); 
 
+//Dashboard Admin ---
+$router->get('/admin/dashboard', [AdminController::class, 'dashboard']);
+
 // --- Autenticação ---
 $router->get('/login', [AuthController::class, 'loginForm']);
 $router->post('/login', [AuthController::class, 'login']);

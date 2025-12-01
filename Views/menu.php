@@ -29,6 +29,8 @@ if (!empty($_SESSION['cart'])) {
             <?php // Mostra links de admin apenas se o usuário for um administrador ?>
             <?php if (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin'): ?>
                 <span class="pipe">|</span>
+                <a href="/fanbeads/admin/dashboard">★ Dashboard</a>
+                <span class="pipe">|</span>
                 <a href="/fanbeads/produtos/novo">Adicionar Produto</a>
             <?php endif; ?>
         </div>
